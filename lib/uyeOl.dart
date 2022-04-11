@@ -1,3 +1,4 @@
+import 'package:bak_pisir/mailOnay.dart';
 import 'package:flutter/material.dart';
 
 class uyeOl extends StatefulWidget {
@@ -55,6 +56,7 @@ class _uyeOlState extends State<uyeOl> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: ElevatedButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => mailOnay()));
 
 
                 }, child: Text("Üye Ol")),
