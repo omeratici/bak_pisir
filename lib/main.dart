@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 
 import 'Users.dart';
 import 'UsersCevap.dart';
+import 'dolabim.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,27 +47,20 @@ class _GirisEkraniState extends State<GirisEkrani> {
   String _errorMessage = '';
 
   List<Users> parseUsersCevap(String cevap){
-    print("parseUserCEvap çalıştı ");
     var jsonVeri = json.decode(cevap);
-    print("cevap parse cevap içi" +cevap);
     var userCevap = UsersCevap.fromJson(jsonVeri);
     List<Users> userList =userCevap.userList;
-    print("****parseusercevap içi liste ilk elemeannı" +userList[0].userName);
     return userList;
   }
 
   Future<List<Users>> allUsers () async {
-    print("allUsers çalıştı ");
     var url =Uri.parse("http://213.14.130.80/bakpisir/Usersget.php");
     var cevap = await http.get(url);
-    print ("allUsers içi cevap"+cevap.body+ "    arasında");
+
     return parseUsersCevap(cevap.body);
   }
   Future<void> kullan() async {
-    print("kullan çalıştı ");
     var liste = await allUsers();
-    print("listebaşı isim" +liste[0].userName);
-
     for(var k in liste){
       print(k.userId);
       print(k.userName);
@@ -79,7 +73,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
 
     super.initState();
     kullan();
-    print("initState çalıştı ");
+
   }
   @override
   Widget build(BuildContext context) {
@@ -121,9 +115,10 @@ class _GirisEkraniState extends State<GirisEkrani> {
 
                     }, child: Text("Giriş Yap")),
                     ElevatedButton(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => uyeOl()));
-  
 
+                      //dolabim.dart ı görebilmek için geçiçi olarak değiştirildi.
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => uyeOl()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => dolabim()));
                     }, child: Text("Üye Ol")),
                   ]
                 ),

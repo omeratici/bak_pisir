@@ -11,7 +11,6 @@ class Users {
   Users(this.userId, this.userName, this.userRole, this.pinCode);
 
   factory Users.fromJson(Map<String,dynamic> json){
-    print("Users factory içi");
     return Users(int.parse(json["userId"] as String), json["userName"] as String,json["userRole"] as String,json["pinCode"] as String );
   }
 

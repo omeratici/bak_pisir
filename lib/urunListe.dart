@@ -11,7 +11,7 @@ class urunListe extends StatefulWidget {
 class _urunListeState extends State<urunListe> {
 
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  var urunler = ["Ürün 1","Ürün 2", "Ürün 3","Ürün4"];
+  var urunler = ["Ürün 1","Ürün 2", "Ürün 3","Ürün 4"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
