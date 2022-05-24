@@ -52,6 +52,7 @@ class _MyDrawerState extends State<MyDrawer> {
             title: Text("Favori Tariflerim"),
             onTap: (){
               Navigator.pop(context);
+
             },
           ),
           ListTile(
