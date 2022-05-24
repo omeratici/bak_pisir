@@ -1,3 +1,4 @@
+import 'package:bak_pisir/Widgets/MyDrawer.dart';
 import 'package:bak_pisir/urunListe.dart';
 import 'package:flutter/material.dart';
 
@@ -15,33 +16,28 @@ class _anaSAyfaState extends State<anaSAyfa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key:scaffoldKey,
       appBar: AppBar(
         title: Text("Bak Pişir - Ana Sayfa"),
       ),
-      body:  ListView.builder(
-        itemCount: yemekler.length,
-        itemBuilder: (context,index){
-          return GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => urunListe()));
-            },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  height: 50,
-                  child: Row(
-                    children: [
-                      Text(yemekler[index]),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+      drawer: MyDrawer(),
+      key:scaffoldKey,
 
-        }
+      body:  GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 2/1),
+          itemCount: yemekler.length,
+          itemBuilder: (context,index){
+            return Card(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(yemekler[index])
+                ],
+              ),
+            );
+          }
+
       ),
 
     );

@@ -1,6 +1,8 @@
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
 
+import 'Widgets/MyDrawer.dart';
+
 class dolabim extends StatefulWidget {
   const dolabim({Key? key}) : super(key: key);
 
@@ -38,10 +40,12 @@ class _dolabimState extends State<dolabim> {
     final double ekranYuksekligi = ekranBilgisi.size.height;
     final double ekranGenisligi = ekranBilgisi.size.width;
     return Scaffold(
-      key:scaffoldKey,
       appBar: AppBar(
         title: Text("Bak Pişir - Dolabım"),
       ),
+      drawer: MyDrawer(),
+      key:scaffoldKey,
+
       body: Column(
         children: [
           Center(

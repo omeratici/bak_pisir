@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Widgets/MyDrawer.dart';
+
 class tarifSayfasi extends StatefulWidget {
   const tarifSayfasi({Key? key}) : super(key: key);
 
@@ -17,10 +19,12 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
     final double ekranYuksekligi = ekranBilgisi.size.height;
     final double ekranGenisligi = ekranBilgisi.size.width;
     return Scaffold(
-      key:scaffoldKey,
       appBar: AppBar(
-        title: Text("Bak Pişir - Tarif"),
+        title: Text("Bak Pişir - Tafir"),
       ),
+      drawer: MyDrawer(),
+      key:scaffoldKey,
+
       body: SingleChildScrollView(
         child: Column(
           children: [
