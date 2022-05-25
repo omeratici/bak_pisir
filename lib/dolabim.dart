@@ -15,7 +15,8 @@ class _dolabimState extends State<dolabim> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   //malzemeleri birimleri ile birlikte listelemek istersek böyle yapalım (1)
-  var malzemeler = {"Malzeme 1": 2,"Malzeme 2":5 , "Malzeme 3":8,"Malzeme 4":3};
+  var malzemeler = ["Malzeme 1" , "Malzeme 2", "Malzeme 3","Malzeme 4"];
+  var secilimalzemeler =[];
 
   //Checkbox için bir liste tanımlandı
   late List<bool> _isChecked;
@@ -52,41 +53,34 @@ class _dolabimState extends State<dolabim> {
             child: SizedBox(
               height: ekranYuksekligi*0.8,
               width: ekranGenisligi*0.8,
-              child: ListView.builder(
+              child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 2/1),
                   itemCount: malzemeler.length,
                   itemBuilder: (context,index){
-                    //malzemeleri birimleri ile birlikte listelemek istersek böyle yapalım (2)
-                    //value değerlerini key e aktarıyor
-                    String key = malzemeler.keys.elementAt(index);
-                    return GestureDetector(
-                      onTap: (){
-
-                      },
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 50,
-                            child: Row(
-                              children: [
-
-                                Checkbox(value: _isChecked[index], onChanged: (bool? value) {
-                                  setState(() {
-                                    _isChecked[index]  = value!;
-                                  });
-                                },),
-                                Text("(${index+1})"),
-                                Text("----$key"),
-                                Text("-------${malzemeler[key]}"),
-                              ],
-                            ),
+                    return Card(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Checkbox(
+                            value: _isChecked[index],
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _isChecked[index]  = value!;
+                              });
+                            },
                           ),
-                        ),
+                          Text("-------${malzemeler[index]}"),
+                           ///Text(malzemeler[index])
+                        ],
                       ),
                     );
-
                   }
+
               ),
+
+
             ),
           ),
           Padding(
@@ -94,20 +88,23 @@ class _dolabimState extends State<dolabim> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children:[
-                  ElevatedButton(onPressed: (){
+                  ElevatedButton(
+                      child: Text("Malzeme Sil"),
+                      onPressed: (){
                     for(var i=0; i<malzemeler.length;i++){
                       if(_isChecked[i])
                         {
-                          String key = malzemeler.keys.elementAt(i);
-                          print("$key");
-                          malzemeler.remove(key);
+                          malzemeler.remove(i);
                           setState(() {
+                            print(malzemeler);
                           });
                         }
                     }
 
-                  }, child: Text("Malzeme Sil")),
+                  }),
+
                   ElevatedButton(
+                      child: Text("Malzeme Ekle"),
                       onPressed: () async {
                         var a =await openDialog();
 
@@ -116,8 +113,7 @@ class _dolabimState extends State<dolabim> {
                         // print(malzemeler);
 
 
-                      },
-                      child: Text("Malzeme Ekle")),
+                      }),
                 ]
             ),
           ),

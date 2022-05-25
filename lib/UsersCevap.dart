@@ -7,6 +7,7 @@ class UsersCevap {
   late List<Users> userList;
 
   UsersCevap(this.success, this.userList);
+
   factory UsersCevap.fromJson(Map<String,dynamic> json){
     var jsonArray =json["Users"] as List;
     List<Users> userList = jsonArray.map((jaysonArrayNesnesi) => Users.fromJson(jaysonArrayNesnesi)).toList();
