@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'package:bak_pisir/anaSayfa.dart';
 import 'package:bak_pisir/sifremiUnuttum.dart';
 import 'package:bak_pisir/uyeOl.dart';
@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'Users.dart';
 import 'UsersCevap.dart';
 import 'dolabim.dart';
+
 
 
 void main() {
@@ -48,7 +49,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
 
   Users parseUsersCevap(String cevap){
     var jsonVeri = json.decode(cevap);
-    var user =Users(0, "xxx", "0", "0");
+    var user =Users(0,"xx","0","0","xx");
     if(jsonVeri["success"] as int==1){
       var userCevap = UsersCevap.fromJson(jsonVeri);
       List<Users> userList =userCevap.userList;
@@ -71,7 +72,9 @@ class _GirisEkraniState extends State<GirisEkrani> {
       print(aktifKullanici.userName);
       Navigator.push(context, MaterialPageRoute(builder: (context) => anaSAyfa()));
     }else {
-      //Todo Snackbar yap
+     ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Kullanıcı Adi veya Şifre Hatalı")),
+     );
     }
 
   }

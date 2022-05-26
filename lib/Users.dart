@@ -6,12 +6,13 @@ class Users {
   late String userName;
   late String userRole;
   late String pinCode;
+  late String email;
 
 
-  Users(this.userId, this.userName, this.userRole, this.pinCode);
+  Users(this.userId, this.userName, this.userRole, this.pinCode,this.email);
 
   factory Users.fromJson(Map<String,dynamic> json){
-    return Users(int.parse(json["userId"] as String), json["userName"] as String,json["userRole"] as String,json["pinCode"] as String );
+    return Users(int.parse(json["userId"] as String), json["userName"] as String,json["userRole"] as String,json["pinCode"] as String,json["email"] as String);
   }
 
 
