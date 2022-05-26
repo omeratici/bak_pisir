@@ -33,7 +33,6 @@ class _uyeOlState extends State<uyeOl> {
         SnackBar(content: Text("Kayıt Başarısız Tekrar Deneyin")),
       );
     }
-
     print(cevap.body.toString());
 
   }
