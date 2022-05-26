@@ -65,7 +65,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
 
     return parseUsersCevap(cevap.body);
   }
-  Future<void> kullan(String a,String b) async {
+  Future<void> login(String a,String b) async {
     var aktifKullanici = await userGet(a,b);
     if(aktifKullanici.userId != 0){
       print(aktifKullanici.userId);
@@ -123,7 +123,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children:[
                     ElevatedButton(onPressed: (){
-                      kullan(tfKullaniciAdi.text,tfKSifre.text);
+                      login(tfKullaniciAdi.text,tfKSifre.text);
 
 
 
