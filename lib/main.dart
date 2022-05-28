@@ -130,8 +130,6 @@ class _GirisEkraniState extends State<GirisEkrani> {
                     }, child: Text("Giriş Yap")),
                     ElevatedButton(onPressed: (){
 
-                      //dolabim.dart ı görebilmek için geçiçi olarak değiştirildi.
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => uyeOl()));
                       Navigator.push(context, MaterialPageRoute(builder: (context) => uyeOl()));
                     }, child: Text("Üye Ol")),
                   ]

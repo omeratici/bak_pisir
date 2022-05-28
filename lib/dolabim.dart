@@ -1,6 +1,7 @@
+import 'package:bak_pisir/Ingredients.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import 'Widgets/MyDrawer.dart';
 
 class dolabim extends StatefulWidget {
@@ -11,18 +12,22 @@ class dolabim extends StatefulWidget {
 }
 
 class _dolabimState extends State<dolabim> {
-
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
   //malzemeleri birimleri ile birlikte listelemek istersek böyle yapalım (1)
   var malzemeler = ["Malzeme 1" , "Malzeme 2", "Malzeme 3","Malzeme 4"];
   var secilimalzemeler =[];
-
   //Checkbox için bir liste tanımlandı
   late List<bool> _isChecked;
-
   late TextEditingController controller;
-
+//Todo malzemeleri getiren fonsiyonu yaz...
+ /*  Future<List<Ingredients>> ingredientsGet (String a) async {
+    var url =Uri.parse("http://213.14.130.80/bakpisir/Usersget3.php");
+    var veri = {"userID":a};
+    var cevap = await http.post(url,body: veri);
+    List<Ingredients> IngList = par
+    return parseUsersCevap(cevap.body);
+  }
+*/
   @override
   void initState() {
     super.initState();
@@ -100,7 +105,6 @@ class _dolabimState extends State<dolabim> {
                           });
                         }
                     }
-
                   }),
 
                   ElevatedButton(
@@ -111,18 +115,13 @@ class _dolabimState extends State<dolabim> {
                         //Todo gelen stringi hash map e ekle
                         // malzemeler[a.toString()]=1;
                         // print(malzemeler);
-
-
                       }),
                 ]
             ),
           ),
         ],
       ),
-
-
     );
-
   }
   Future <String?> openDialog() =>showDialog <String> (
       context: context,
