@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:bak_pisir/Ingredients.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'IngredientsCevap.dart';
+
 import 'Widgets/MyDrawer.dart';
 
 class dolabim extends StatefulWidget {
@@ -11,29 +15,46 @@ class dolabim extends StatefulWidget {
   State<dolabim> createState() => _dolabimState();
 }
 
-
 class _dolabimState extends State<dolabim> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  //malzemeleri birimleri ile birlikte listelemek istersek böyle yapalım (1)
-  var malzemeler = ["Malzeme 1" , "Malzeme 2", "Malzeme 3","Malzeme 4"];
+
+  late List<Ingredients> ingredientsList = [];
+
   var secilimalzemeler =[];
   //Checkbox için bir liste tanımlandı
   late List<bool> _isChecked;
   late TextEditingController controller;
-//Todo malzemeleri getiren fonsiyonu yaz...
- /*  Future<List<Ingredients>> ingredientsGet (String a) async {
-    var url =Uri.parse("http://213.14.130.80/bakpisir/Usersget3.php");
+
+  Future<List<Ingredients>> ingredientsGet (String a) async {
+    var url =Uri.parse("http://213.14.130.80/bakpisir/IngredientsGet.php");
     var veri = {"userID":a};
     var cevap = await http.post(url,body: veri);
-    List<Ingredients> IngList = par
-    return parseUsersCevap(cevap.body);
+    return parseIngredientsCevap(cevap.body);
   }
-*/
+
+  Future<void> IngredientsGoster() async {
+    ingredientsList = await ingredientsGet("1");
+    //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
+    _isChecked = List<bool>.filled(ingredientsList.length, false);
+    setState(() {
+    });
+  }
+
+  List<Ingredients> parseIngredientsCevap(String cevap) {
+    var jsonVeri = json.decode(cevap);
+    List<Ingredients> ingredientsList =[];
+    if (jsonVeri["success"] as int == 1) {
+      var ingredientsCevap = IngredientsCevap.fromJson(jsonVeri);
+      ingredientsList = ingredientsCevap.ingredientsList;
+    }
+    return ingredientsList ;
+  }
   @override
   void initState() {
     super.initState();
-    //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
-    _isChecked = List<bool>.filled(malzemeler.length, false);
+    IngredientsGoster();
+
+
     controller= TextEditingController();
   }
   @override
@@ -46,6 +67,7 @@ class _dolabimState extends State<dolabim> {
     var ekranBilgisi = MediaQuery.of(context);
     final double ekranYuksekligi = ekranBilgisi.size.height;
     final double ekranGenisligi = ekranBilgisi.size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Bak Pişir - Dolabım"),
@@ -63,7 +85,7 @@ class _dolabimState extends State<dolabim> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 2/1),
-                  itemCount: malzemeler.length,
+                  itemCount: ingredientsList.length,
                   itemBuilder: (context,index){
                     return Card(
                       child: Row(
@@ -77,8 +99,8 @@ class _dolabimState extends State<dolabim> {
                               });
                             },
                           ),
-                          Text("-------${malzemeler[index]}"),
-                           ///Text(malzemeler[index])
+                          Text("-------${ingredientsList[index].ingName}"),
+
                         ],
                       ),
                     );
@@ -97,12 +119,13 @@ class _dolabimState extends State<dolabim> {
                   ElevatedButton(
                       child: Text("Malzeme Sil"),
                       onPressed: (){
-                    for(var i=0; i<malzemeler.length;i++){
+                    for(var i=0; i<ingredientsList.length;i++){
                       if(_isChecked[i])
                         {
-                          malzemeler.remove(i);
+                          //todo bu indexi db den sil ve malzeme görteri tekrar çalıştır
+                          ingredientsList.remove(i);
                           setState(() {
-                            print(malzemeler);
+                            print(ingredientsList);
                           });
                         }
                     }
@@ -112,6 +135,7 @@ class _dolabimState extends State<dolabim> {
                       child: Text("Malzeme Ekle"),
                       onPressed: () async {
                         var a =await openDialog();
+
 
                         //Todo gelen stringi hash map e ekle
                         // malzemeler[a.toString()]=1;
