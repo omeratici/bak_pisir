@@ -11,6 +11,7 @@ class dolabim extends StatefulWidget {
   State<dolabim> createState() => _dolabimState();
 }
 
+
 class _dolabimState extends State<dolabim> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   //malzemeleri birimleri ile birlikte listelemek istersek böyle yapalım (1)
