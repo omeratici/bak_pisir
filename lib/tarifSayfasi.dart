@@ -1,9 +1,13 @@
+import 'package:bak_pisir/Users.dart';
 import 'package:flutter/material.dart';
 
 import 'Widgets/MyDrawer.dart';
 
 class tarifSayfasi extends StatefulWidget {
-  const tarifSayfasi({Key? key}) : super(key: key);
+  Users aktifKullanici;
+  tarifSayfasi(this.aktifKullanici);
+
+ // const tarifSayfasi({Key? key}) : super(key: key);
 
   @override
   State<tarifSayfasi> createState() => _tarifSayfasiState();
@@ -22,7 +26,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
       appBar: AppBar(
         title: Text("Bak Pişir - Tafir"),
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(widget.aktifKullanici),
       key:scaffoldKey,
 
       body: SingleChildScrollView(

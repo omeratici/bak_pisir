@@ -67,7 +67,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
       print(aktifKullanici.userId);
       print(aktifKullanici.userName);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => anaSAyfa()));
+          context, MaterialPageRoute(builder: (context) => anaSAyfa(aktifKullnaici:aktifKullanici)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Kullanıcı Adi veya Şifre Hatalı")),

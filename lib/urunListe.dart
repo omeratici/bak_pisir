@@ -1,10 +1,13 @@
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
 
+import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
 
 class urunListe extends StatefulWidget {
-  const urunListe({Key? key}) : super(key: key);
+  Users aktifKullanici;
+  urunListe(this.aktifKullanici);
+ // const urunListe({Key? key}) : super(key: key);
 
   @override
   State<urunListe> createState() => _urunListeState();
@@ -20,7 +23,7 @@ class _urunListeState extends State<urunListe> {
       appBar: AppBar(
         title: Text("Bak Pişir - Ürün Liste"),
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(widget.aktifKullanici),
       key:scaffoldKey,
 
       body:  ListView.builder(
@@ -28,7 +31,7 @@ class _urunListeState extends State<urunListe> {
           itemBuilder: (context,index){
             return GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
               },
               child: Card(
                 child: Padding(

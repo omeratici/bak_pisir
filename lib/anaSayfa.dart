@@ -7,9 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'FoodtypesCevap.dart';
+import 'Users.dart';
 
 class anaSAyfa extends StatefulWidget {
-  const anaSAyfa({Key? key}) : super(key: key);
+  Users aktifKullnaici;
+  anaSAyfa({required this.aktifKullnaici});
+  //const anaSAyfa({Key? key}) : super(key: key);
 
   @override
   State<anaSAyfa> createState() => _anaSAyfaState();
@@ -58,7 +61,7 @@ class _anaSAyfaState extends State<anaSAyfa> {
       appBar: AppBar(
         title: Text("Bak Pişir - Ana Sayfa"),
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(widget.aktifKullnaici),
       key:scaffoldKey,
 
       body:  GridView.builder(

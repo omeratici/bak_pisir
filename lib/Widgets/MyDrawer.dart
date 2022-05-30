@@ -3,16 +3,22 @@ import 'package:bak_pisir/anaSayfa.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
 
+import '../Users.dart';
 import '../dolabim.dart';
 
 class MyDrawer extends StatefulWidget {
-  const MyDrawer({Key? key}) : super(key: key);
+  Users aktifKullanici;
+  MyDrawer(this.aktifKullanici);
+ // const MyDrawer({Key? key}) : super(key: key);
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+
+
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -29,7 +35,7 @@ class _MyDrawerState extends State<MyDrawer> {
           ListTile(
             title: Text("Ana Sayfa"),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => anaSAyfa()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => anaSAyfa(aktifKullnaici: widget.aktifKullanici)));
             }
 
           ),
@@ -40,13 +46,13 @@ class _MyDrawerState extends State<MyDrawer> {
           ListTile(
             title: Text("Dolabımda Neler Var?"),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => dolabim()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => dolabim(widget.aktifKullanici)));
             },
           ),
           ListTile(
             title: Text("Tarif Yaz"),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
             },
           ),
           ListTile(

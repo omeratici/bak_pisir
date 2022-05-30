@@ -1,15 +1,16 @@
 import 'dart:convert';
-
 import 'package:bak_pisir/Ingredients.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'IngredientsCevap.dart';
-
+import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
 
 class dolabim extends StatefulWidget {
-  const dolabim({Key? key}) : super(key: key);
+  Users aktifKullanici;
+  dolabim(this.aktifKullanici);
+ // const dolabim({Key? key}) : super(key: key);
 
   @override
   State<dolabim> createState() => _dolabimState();
@@ -33,7 +34,7 @@ class _dolabimState extends State<dolabim> {
   }
 
   Future<void> IngredientsGoster() async {
-    ingredientsList = await ingredientsGet("1");
+    ingredientsList = await ingredientsGet(widget.aktifKullanici.userId.toString());
     //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
     _isChecked = List<bool>.filled(ingredientsList.length, false);
     setState(() {
@@ -49,6 +50,32 @@ class _dolabimState extends State<dolabim> {
     }
     return ingredientsList ;
   }
+
+  Future<void> insertIngredients(
+      String userID, String ingName) async {
+    var url = Uri.parse("http://213.14.130.80/bakpisir/insert_ingredients.php");
+    var veri = {
+      "userID": userID,
+      "ingName": ingName,
+    };
+    var cevap = await http.post(url, body: veri);
+    var jsonVeri = json.decode(cevap.body);
+    if (jsonVeri["success"] as int == 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Kayıt Başarılı")),
+      );
+      IngredientsGoster();
+      setState(() {
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Kayıt Başarısız Tekrar Deneyin")),
+      );
+    }
+    print(cevap.body.toString());
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -72,79 +99,81 @@ class _dolabimState extends State<dolabim> {
       appBar: AppBar(
         title: Text("Bak Pişir - Dolabım"),
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(widget.aktifKullanici),
       key:scaffoldKey,
 
-      body: Column(
-        children: [
-          Center(
-            child: SizedBox(
-              height: ekranYuksekligi*0.8,
-              width: ekranGenisligi*0.8,
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2/1),
-                  itemCount: ingredientsList.length,
-                  itemBuilder: (context,index){
-                    return Card(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Checkbox(
-                            value: _isChecked[index],
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _isChecked[index]  = value!;
-                              });
-                            },
-                          ),
-                          Text("-------${ingredientsList[index].ingName}"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Center(
+              child: SizedBox(
+                height: ekranYuksekligi*0.8,
+                width: ekranGenisligi*0.8,
+                child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 2/1),
+                    itemCount: ingredientsList.length,
+                    itemBuilder: (context,index){
+                      return Card(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Checkbox(
+                              value: _isChecked[index],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _isChecked[index]  = value!;
+                                });
+                              },
+                            ),
+                            Text("-------${ingredientsList[index].ingName}"),
 
-                        ],
-                      ),
-                    );
-                  }
+                          ],
+                        ),
+                      );
+                    }
+
+                ),
+
 
               ),
-
-
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children:[
-                  ElevatedButton(
-                      child: Text("Malzeme Sil"),
-                      onPressed: (){
-                    for(var i=0; i<ingredientsList.length;i++){
-                      if(_isChecked[i])
-                        {
-                          //todo bu indexi db den sil ve malzeme görteri tekrar çalıştır
-                          ingredientsList.remove(i);
-                          setState(() {
-                            print(ingredientsList);
-                          });
-                        }
-                    }
-                  }),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children:[
+                    ElevatedButton(
+                        child: Text("Malzeme Sil"),
+                        onPressed: (){
+                      for(var i=0; i<ingredientsList.length;i++){
+                        if(_isChecked[i])
+                          {
+                            //todo bu indexi db den sil ve malzeme görteri tekrar çalıştır
+                            ingredientsList.remove(i);
+                            setState(() {
+                              print(ingredientsList);
+                            });
+                          }
+                      }
+                    }),
 
-                  ElevatedButton(
-                      child: Text("Malzeme Ekle"),
-                      onPressed: () async {
-                        var a =await openDialog();
+                    ElevatedButton(
+                        child: Text("Malzeme Ekle"),
+                        onPressed: () async {
+                          var a =await openDialog();
 
 
-                        //Todo gelen stringi hash map e ekle
-                        // malzemeler[a.toString()]=1;
-                        // print(malzemeler);
-                      }),
-                ]
+                          //Todo gelen stringi hash map e ekle
+                          // malzemeler[a.toString()]=1;
+                          // print(malzemeler);
+                        }),
+                  ]
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -159,13 +188,14 @@ class _dolabimState extends State<dolabim> {
     ),
     actions: [
       TextButton(onPressed: (){
-        ekle();
+        insertIngredients(widget.aktifKullanici.userId.toString(),controller.text);
+        Navigator.of(context).pop();
 
       }, child: Text("Ekle"))
     ],
   ));
-  void ekle(){
+ /* void ekle(){
     Navigator.of(context).pop(controller.text);
 
-  }
+  } */
 }
