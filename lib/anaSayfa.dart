@@ -25,7 +25,8 @@ class _anaSAyfaState extends State<anaSAyfa> {
 
   List<Foodtypes> parsetypesCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
-
+    print("******");
+    print(jsonVeri);
     if (jsonVeri["success"] as int == 1) {
       var typesCevap = FoodtypesCevap.fromJson(jsonVeri);
       typesList = typesCevap.typesList;
@@ -42,6 +43,7 @@ class _anaSAyfaState extends State<anaSAyfa> {
     print("typeGet çalıştı");
     var url = Uri.parse("http://213.14.130.80/bakpisir/FoodtypesGet.php");
     var cevap = await http.get(url);
+    print("typeGet Cevap:");
     print(cevap.body);
     return parsetypesCevap(cevap.body);
   }
@@ -80,10 +82,18 @@ class _anaSAyfaState extends State<anaSAyfa> {
             ),
             bottom:
                 TabBar(indicatorColor: Colors.white, indicatorWeight: 3, tabs: [
-              Tab(icon: Icon(Icons.home), text: 'Anasayfa'),
-              Tab(icon: Icon(DBIcons.fridge), text: 'Dolabım'),
-              Tab(icon: Icon(Icons.book_sharp), text: 'Tariflerim'),
-              Tab(icon: Icon(Icons.settings), text: 'Ayarlar'),
+              Tab(icon: Icon(Icons.home), text: 'Anasayfa'
+
+              ),
+              Tab(icon: Icon(DBIcons.fridge), text: 'Dolabım'
+
+              ),
+              Tab(icon: Icon(Icons.book_sharp), text: 'Tariflerim'
+
+              ),
+              Tab(icon: Icon(Icons.settings), text: 'Ayarlar'
+
+              ),
             ]),
           ),
           drawer: MyDrawer(widget.aktifKullnaici),

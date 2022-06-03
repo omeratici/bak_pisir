@@ -1,15 +1,15 @@
-import 'package:bak_pisir/Ingredients.dart';
+import 'Ingredients.dart';
 
 class IngredientsCevap {
   late int success;
-  late List<Ingredients> ingredientsList;
+  late List<Ingredients> IngredientsList;
 
-  IngredientsCevap(this.success, this.ingredientsList);
+  IngredientsCevap(this.success, this.IngredientsList);
 
   factory IngredientsCevap.fromJson(Map<String, dynamic> json){
     var jsonArray =json["Ingredients"] as List;
-    List<Ingredients> ingredientsList = jsonArray.map((jaysonArrayNesnesi) => Ingredients.fromJson(jaysonArrayNesnesi)).toList();
-    return IngredientsCevap(json["success"] as int, ingredientsList);
+    List<Ingredients> IngredientsList = jsonArray.map((jaysonArrayNesnesi) => Ingredients.fromJson(jaysonArrayNesnesi)).toList();
+    return IngredientsCevap(json["success"] as int, IngredientsList);
 
   }
 }

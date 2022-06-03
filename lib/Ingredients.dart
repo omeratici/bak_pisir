@@ -1,15 +1,15 @@
 class Ingredients {
   late int ingID;
   late String ingName;
-  late String unitID;
-  late String quantity;
-  late int userID;
+  late String ingType;
+  late String ingImage;
 
-  Ingredients(this.ingID, this.ingName, this.unitID,this.quantity,this.userID);
+
+  Ingredients(this.ingID, this.ingName, this.ingType,this.ingImage);
 
       factory Ingredients.fromJson(Map<String,dynamic> json){
         print("Ingredients.fromJson çalıştı");
-        var a = Ingredients(int.parse(json["ingID"] as String), json["ingName"] as String,json["unitID"] as String, json["quantity"] as String, int.parse(json["userID"] as String)) ;
+        var a = Ingredients(int.parse(json["ingID"] as String), json["ingName"] as String,json["ingType"] as String, json["ingImage"]) ;
         print(a.ingName);
         return a;
           }
