@@ -1,7 +1,10 @@
 import 'dart:convert';
+//import 'dart:html';
 import 'package:bak_pisir/MyIngredients.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'Ingredients.dart';
+import 'IngredientsCevap.dart';
 import 'MyIngredientsCevap.dart';
 import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
@@ -17,48 +20,18 @@ class dolabim extends StatefulWidget {
 
 class _dolabimState extends State<dolabim> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
-  late List<MyIngredients> ingredientsList = [];
-
-
+  late List<MyIngredients> myingredientsList = [];
+  late List<Ingredients> ingredientsList = [];
 
   //Checkbox için bir liste tanımlandı
   late List<bool> _isChecked;
   late TextEditingController controller;
-
-
-  // Initial Selected Value
-  String dropdownvalue = 'Sebzeler';
-
-  // List of items in our dropdown menu
-  var turler = [
-    'Sebzeler',
-    'Etler',
-    'Baharatlar',
-    'Meyveler',
-    'Çeşitli',
-  ];
-  var ikinci = [
-    'kabak',
-    'patlıcan',
-    'lahana',
-    'Çeşitli',
-  ];
-
 
   Future<List<MyIngredients>> MyIngredientsGet(String a) async {
     var url = Uri.parse("http://213.14.130.80/bakpisir/MyIngredientsGet.php");
     var veri = {"userID": a};
     var cevap = await http.post(url, body: veri);
     return parseMyIngredientsCevap(cevap.body);
-  }
-
-  Future<void> MyIngredientsGoster() async {
-    ingredientsList =
-    await MyIngredientsGet(widget.aktifKullanici.userId.toString());
-    //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
-    _isChecked = List<bool>.filled(ingredientsList.length, false);
-    setState(() {});
   }
 
   List<MyIngredients> parseMyIngredientsCevap(String cevap) {
@@ -69,6 +42,14 @@ class _dolabimState extends State<dolabim> {
       myingredientsList = myingredientsCevap.MyingredientsList;
     }
     return myingredientsList;
+  }
+
+  Future<void> MyIngredientsGoster() async {
+    myingredientsList =
+    await MyIngredientsGet(widget.aktifKullanici.userId.toString());
+    //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
+    _isChecked = List<bool>.filled(myingredientsList.length, false);
+    setState(() {});
   }
 
   Future<void> insertMyIngredients(String userID, String ingName) async {
@@ -93,57 +74,42 @@ class _dolabimState extends State<dolabim> {
     print(cevap.body.toString());
   }
 
+  Future<List<Ingredients>> IngredientsGet() async {
+    var url = Uri.parse("http://213.14.130.80/bakpisir/IngredientsGet.php");
+    var cevap = await http.get(url);
+    return parseIngredientsCevap(cevap.body);
+  }
+
+  List<Ingredients> parseIngredientsCevap(String cevap) {
+    var jsonVeri = json.decode(cevap);
+
+    if (jsonVeri["success"] as int == 1) {
+      var ingredientsCevap = IngredientsCevap.fromJson(jsonVeri);
+      ingredientsList = ingredientsCevap.IngredientsList;
+    }
+    return ingredientsList;
+  }
+
   Future <String?> openDialog() =>
       showDialog <String>(
 
           context: context,
           builder: (context) =>
               AlertDialog(
+                title: const Text("Eklenecek Malzeme Girin"),
+                content:
+                TextField(
+                  autofocus: true,
+                  decoration: const InputDecoration(hintText: "Dolapta ne var?",),
+                  controller: controller,
+                  ),
 
-                title: Text("Eklenecek Malzeme Girin"),
-
-
-                /*
-                DropdownButton(
-
-
-                  // Initial Value
-                  value: dropdownvalue,
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: turler.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
-                  onChanged: (String? newValue) {
-
-
-                    setState(() {
-                      dropdownvalue = newValue!;
-                    });
-
+                actions: [
+                TextButton(onPressed: (){
+                  insertMyIngredients(widget.aktifKullanici.userId.toString(),controller.text);
+                  Navigator.of(context).pop();
                   },
-                ),
-
-*/
-                content: TextField(
-          autofocus: true,
-          decoration: InputDecoration(hintText: "Dolapta ne var?",),
-          controller: controller,
-    ),
-    actions: [
-      TextButton(onPressed: (){
-        insertMyIngredients(widget.aktifKullanici.userId.toString(),controller.text);
-        Navigator.of(context).pop();
-
-      }, child: Text("Ekle"))
+                    child: const Text("Ekle"))
     ]
               ));
 
@@ -151,7 +117,7 @@ class _dolabimState extends State<dolabim> {
   void initState() {
     super.initState();
     MyIngredientsGoster();
-
+    IngredientsGet();
 
     controller = TextEditingController();
   }
@@ -181,14 +147,15 @@ class _dolabimState extends State<dolabim> {
             Center(
               child: SizedBox(
                 height: ekranYuksekligi * 0.8,
-                width: ekranGenisligi * 0.8,
+                width: ekranGenisligi * 0.9,
                 child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 2 / 1),
-                    itemCount: ingredientsList.length,
+                        childAspectRatio: 3 / 1),
+                    itemCount: myingredientsList.length,
                     itemBuilder: (context, index) {
                       return Card(
+
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -201,7 +168,8 @@ class _dolabimState extends State<dolabim> {
                                 });
                               },
                             ),
-                            Text("-------${ingredientsList[index].ingName}"),
+                            Image.network("http://213.14.130.80/bakpisir/sebzeler/${myingredientsList[index].ingImage}"),
+                            Text("-${myingredientsList[index].ingName}"),
 
                           ],
                         ),
@@ -221,14 +189,12 @@ class _dolabimState extends State<dolabim> {
                     ElevatedButton(
                         child: Text("Malzeme Sil"),
                         onPressed: () {
-                          for (var i = 0; i < ingredientsList.length; i++) {
+                          for (var i = 0; i < myingredientsList.length; i++) {
                             if (_isChecked[i]) {
-                              var ingID = ingredientsList[i].ingID;
-
-
-                              ingredientsList.remove(i);
+                              var ingID = myingredientsList[i].ingID;
+                              myingredientsList.remove(i);
                               setState(() {
-                                print(ingredientsList);
+                                print(myingredientsList);
                               });
                             }
                           }
@@ -238,8 +204,6 @@ class _dolabimState extends State<dolabim> {
                         child: Text("Malzeme Ekle"),
                         onPressed: () async {
                           var a = await openDialog();
-
-
                           //Todo gelen stringi hash map e ekle
                           // malzemeler[a.toString()]=1;
                           // print(malzemeler);
