@@ -292,7 +292,6 @@ class _dolabimState extends State<dolabim> {
                               print(myingredientsList[i].myingID.toString());
                               deleteMyIngredients(myingredientsList[i].myingID.toString());
                               setState(() {
-
                               });
                             }
                           }
