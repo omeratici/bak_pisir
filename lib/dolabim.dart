@@ -22,10 +22,13 @@ class _dolabimState extends State<dolabim> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   late List<MyIngredients> myingredientsList = [];
   late List<Ingredients> ingredientsList = [];
-
+  late Set <String> turList = {"sebze"};
   //Checkbox için bir liste tanımlandı
   late List<bool> _isChecked;
   late TextEditingController controller;
+  late String dropdownturListDeger =turList.first;
+  late Ingredients dropdownDeger;
+  late List<Ingredients> dropdownList;
 
   Future<List<MyIngredients>> MyIngredientsGet(String a) async {
     var url = Uri.parse("http://213.14.130.80/bakpisir/MyIngredientsGet.php");
@@ -52,11 +55,11 @@ class _dolabimState extends State<dolabim> {
     setState(() {});
   }
 
-  Future<void> insertMyIngredients(String userID, String ingName) async {
+  Future<void> insertMyIngredients(String userID, String ingID) async {
     var url = Uri.parse("http://213.14.130.80/bakpisir/insert_MyIngredients.php");
     var veri = {
       "userID": userID,
-      "ingName": ingName,
+      "ingID": ingID,
     };
     var cevap = await http.post(url, body: veri);
     var jsonVeri = json.decode(cevap.body);
@@ -74,6 +77,29 @@ class _dolabimState extends State<dolabim> {
     print(cevap.body.toString());
   }
 
+  Future<void> deleteMyIngredients(String myingID) async {
+    var url = Uri.parse("http://213.14.130.80/bakpisir/delete_MyIngredients.php");
+    var veri = {
+      "myingID": myingID,
+    };
+    var cevap = await http.post(url, body: veri);
+    print("/*/*/*");
+    print(cevap.body.isEmpty);
+    var jsonVeri = json.decode(cevap.body);
+    if (jsonVeri["success"] as int == 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Seçili Malzemeler Silinidi")),
+      );
+      MyIngredientsGoster();
+      setState(() {});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("İşlem Başarısız Tekrar Deneyin")),
+      );
+    }
+    print(cevap.body.toString());
+  }
+
   Future<List<Ingredients>> IngredientsGet() async {
     var url = Uri.parse("http://213.14.130.80/bakpisir/IngredientsGet.php");
     var cevap = await http.get(url);
@@ -86,6 +112,12 @@ class _dolabimState extends State<dolabim> {
     if (jsonVeri["success"] as int == 1) {
       var ingredientsCevap = IngredientsCevap.fromJson(jsonVeri);
       ingredientsList = ingredientsCevap.IngredientsList;
+      dropdownList = ingredientsList;
+      dropdownDeger = dropdownList[0];
+     // turList.clear();
+      for (var i in ingredientsList){
+        turList.add(i.ingType);
+      }
     }
     return ingredientsList;
   }
@@ -96,21 +128,88 @@ class _dolabimState extends State<dolabim> {
           context: context,
           builder: (context) =>
               AlertDialog(
+                content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height*0.2,
+                    width: MediaQuery.of(context).size.height*0.8,
+                    child: Column(
+                      children: [
+                        Text("Malzeme Türünü Seçiniz"),
+                        DropdownButton<String>(
+                          value: dropdownturListDeger,
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          onChanged: (String? newValue) {
+                            Iterable<Ingredients> filtrele = ingredientsList.where((element) {
+                              print("----- ${element.ingType}");
+                              return element.ingType==newValue;
+                            });
+                            dropdownList = filtrele.toList();
+                            dropdownDeger=dropdownList[0];
+                            setState(() {
+                              dropdownturListDeger = newValue!;
+
+                            });
+                          },
+                          items: turList.map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                              onTap: (){
+
+                              },
+                            );
+
+                          }).toList(),
+                        ),
+                        Text("Malzeme Seçiniz"),
+                        DropdownButton<Ingredients>(
+                          value: dropdownDeger,
+                          icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                            ),
+                        onChanged: (Ingredients? newValue) {
+                          setState(() {
+                           dropdownDeger = newValue!;
+                            });
+                          },
+                          items: dropdownList.map<DropdownMenuItem<Ingredients>>((Ingredients value) {
+                            return DropdownMenuItem<Ingredients>(
+                              value: value,
+                              child: Text(value.ingName),
+                               onTap: (){
+                                setState((){
+                                });
+                                },
+                              );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+
                 title: const Text("Eklenecek Malzeme Girin"),
-                content:
-                TextField(
-                  autofocus: true,
-                  decoration: const InputDecoration(hintText: "Dolapta ne var?",),
-                  controller: controller,
-                  ),
+
 
                 actions: [
                 TextButton(onPressed: (){
-                  insertMyIngredients(widget.aktifKullanici.userId.toString(),controller.text);
+                  insertMyIngredients(widget.aktifKullanici.userId.toString(),dropdownDeger.ingID.toString());
                   Navigator.of(context).pop();
                   },
                     child: const Text("Ekle"))
-    ]
+                  ]
+
+
               ));
 
   @override
@@ -155,7 +254,6 @@ class _dolabimState extends State<dolabim> {
                     itemCount: myingredientsList.length,
                     itemBuilder: (context, index) {
                       return Card(
-
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -178,7 +276,6 @@ class _dolabimState extends State<dolabim> {
 
                 ),
 
-
               ),
             ),
             Padding(
@@ -191,10 +288,11 @@ class _dolabimState extends State<dolabim> {
                         onPressed: () {
                           for (var i = 0; i < myingredientsList.length; i++) {
                             if (_isChecked[i]) {
-                              var ingID = myingredientsList[i].ingID;
-                              myingredientsList.remove(i);
+                              print("silinecek öğe");
+                              print(myingredientsList[i].myingID.toString());
+                              deleteMyIngredients(myingredientsList[i].myingID.toString());
                               setState(() {
-                                print(myingredientsList);
+
                               });
                             }
                           }
