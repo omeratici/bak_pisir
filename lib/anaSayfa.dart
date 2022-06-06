@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bak_pisir/FoodList.dart';
 import 'package:bak_pisir/Foodtypes.dart';
 import 'package:bak_pisir/Widgets/MyDrawer.dart';
 import 'package:bak_pisir/assets/db_icons.dart';
@@ -106,12 +107,18 @@ class _anaSAyfaState extends State<anaSAyfa> {
                 mainAxisSpacing: 20),
             itemCount: typesList.length,
             itemBuilder: (context, index) {
-              return Container(
-                alignment: Alignment.center,
-                child: Text(typesList[index].typeName),
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(15)),
+              return GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FoodList(typesList[index].typeName,widget.aktifKullnaici)));
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(typesList[index].typeName),
+                  decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(15)),
+
+                ),
               );
             },
           ),
