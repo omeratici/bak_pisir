@@ -18,6 +18,69 @@ class tarifSayfasi extends StatefulWidget {
 class _tarifSayfasiState extends State<tarifSayfasi> {
   double averageScore = 2.5;
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  double evaluationGrade = 2.5;
+  var yorumText = TextEditingController();
+
+  Future <String?> openDialog() =>
+      showDialog <String>(
+
+          context: context,
+          builder: (context) =>
+              AlertDialog(
+                  content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height*0.5,
+                      width: MediaQuery.of(context).size.height*0.8,
+                      child: Column(
+                        children: [
+                          Text("Yorumunuzu Yazınız"),
+
+                          SizedBox(
+                            height: 200,
+                              child: TextField(
+                                controller: yorumText,
+                                decoration: InputDecoration(
+                                  hintText: "Yorum yazınız"
+                                ),
+                              )),
+
+
+                          Text("Yemek tarifi için puan veriniz"),
+
+                          RatingBar.builder(
+                            initialRating: evaluationGrade,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 3.0),
+                            itemBuilder: (context, _) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                        onRatingUpdate: (rating) {
+                          evaluationGrade =rating;
+                        },
+                      ),
+
+                        ],
+                      ),
+                    );
+                  }),
+
+                  title: const Text("Yorum Yapınız..."),
+
+
+                  actions: [
+                    TextButton(onPressed: (){
+
+                      Navigator.of(context).pop();
+                    },
+                        child: const Text("Ekle"))
+                  ]
+
+
+              ));
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +109,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                     child: SizedBox(
                       height: ekranGenisligi/8,
                       child: TextButton(
+
                         child: Yazi("Yorum Yap", ekranGenisligi/25),
                         style:TextButton.styleFrom(
                           backgroundColor: Colors.deepOrangeAccent,
@@ -53,7 +117,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
 
                         ),
                         onPressed: (){
-                          print("Yorum yapıldı");
+                          openDialog();
                         },
                       ),
                     ),
