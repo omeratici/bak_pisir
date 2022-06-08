@@ -31,7 +31,7 @@ class _urunListeState extends State<urunListe> {
           itemBuilder: (context,index){
             return GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
+              //  Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
               },
               child: Card(
                 child: Padding(

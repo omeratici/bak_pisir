@@ -109,7 +109,7 @@ class _anaSAyfaState extends State<anaSAyfa> {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FoodList(typesList[index].typeName,widget.aktifKullnaici)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => FoodList(typesList[index].typeId,widget.aktifKullnaici)));
                 },
                 child: Container(
                   alignment: Alignment.center,

@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class GirisEkrani extends StatefulWidget {
   @override
   State<GirisEkrani> createState() => _GirisEkraniState();

@@ -50,7 +50,7 @@ class _MyDrawerState extends State<MyDrawer> {
           ListTile(
             title: Text("Tarif Yaz"),
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
+          //    Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
             },
           ),
           ListTile(

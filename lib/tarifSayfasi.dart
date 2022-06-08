@@ -1,11 +1,13 @@
 import 'package:bak_pisir/Users.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'Foods.dart';
 import 'Widgets/MyDrawer.dart';
 
 class tarifSayfasi extends StatefulWidget {
+  Foods food;
   Users aktifKullanici;
-  tarifSayfasi(this.aktifKullanici);
+  tarifSayfasi(this.aktifKullanici,this.food);
 
  // const tarifSayfasi({Key? key}) : super(key: key);
 
@@ -14,7 +16,7 @@ class tarifSayfasi extends StatefulWidget {
 }
 
 class _tarifSayfasiState extends State<tarifSayfasi> {
-
+  double averageScore = 2.5;
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -33,52 +35,65 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
         child: Column(
           children: [
             SizedBox(
-                width: ekranGenisligi,
-                child: Image.asset("resimler/yemekresim.jpeg")
+                width: ekranGenisligi/1.5,
+                child: Image.network("http://213.14.130.80/bakpisir/sebzeler/kabak.jpg"),
             ),
             Row(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: ekranGenisligi/8,
-                    child: TextButton(
-                      style:TextButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        primary: Colors.black,
-                      ),
-                      child: Yazi("Beğen", ekranGenisligi/25),
-                      onPressed: (){
-                        print("Beğenildi");
-                      },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: ekranGenisligi/8,
+                      child: TextButton(
+                        child: Yazi("Yorum Yap", ekranGenisligi/25),
+                        style:TextButton.styleFrom(
+                          backgroundColor: Colors.deepOrangeAccent,
+                          primary: Colors.black,
 
+                        ),
+                        onPressed: (){
+                          print("Yorum yapıldı");
+                        },
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: SizedBox(
-                    height: ekranGenisligi/8,
-                    child: TextButton(
-                      child: Yazi("Yorum Yap", ekranGenisligi/25),
-                      style:TextButton.styleFrom(
-                        backgroundColor: Colors.deepOrangeAccent,
-                        primary: Colors.black,
-
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      height: ekranGenisligi/8,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Ortalama Puan"),
+                          RatingBarIndicator(
+                            rating: averageScore,
+                            itemBuilder: (context, index) => Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            itemCount: 5,
+                            itemSize: 15.0,
+                            direction: Axis.horizontal,
+                          ),
+                          Text(averageScore.toString()),
+                        ],
                       ),
-                      onPressed: (){
-                        print("Yorum yapıldı");
-                      },
-
                     ),
                   ),
                 ),
             ],
           ),
+
           Padding(
             padding:  EdgeInsets.all(ekranYuksekligi/100),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Köfte",
+                Text(widget.food.foodName,
                   style: TextStyle(
                     color: Colors.deepOrangeAccent,
                     fontWeight: FontWeight.bold,
@@ -87,9 +102,8 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                 ),
                 Row(
                   children: [
-                    Yazi("Izgara Üzerinde Pişirime Uygun", ekranGenisligi/25),
                     Spacer(),
-                    Yazi("8 Ağustos", ekranGenisligi/25),
+                    Yazi("Tarif Yazarı : "+widget.food.authorName, ekranGenisligi/25),
                   ],
                 ),
               ],
@@ -97,14 +111,45 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
           ),
           Padding(
             padding:  EdgeInsets.all(ekranYuksekligi/100),
-            child: Yazi("Köfte harcını hazırlamak için, soğanları rendeleyin ve maydanozları ince ince kıyın. İsterseniz, bir diş sarımsak da ekleyebilirsiniz."
-              "Soğan, maydanoz, kıyma, yumurta, zeytinyağı ve tuzu bir kaba alıp iyice yoğurun. Bu sırada istediğiniz baharatları da ekleyerek yoğurmaya devam edin."
-              "Hazırladığınız harcın üzerini streç filmle kapatarak yarım saat buzdolabında dinlendirin."
-              "Ardından harçtan ceviz büyüklüğünde parçalar koparıp yuvarlayın. 1 cm olacak şekilde üzerine bastırarak yassılaştırın.", ekranGenisligi/25),
+            child: Yazi(widget.food.recipe, ekranGenisligi/25),
          ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 400 ,
+                  child: ListView.builder(
+
+                    itemCount: 50,
+                    itemBuilder: (context,index){
+                      return Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Yorum Yapan İsim"+index.toString()),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Yapılan Yorum "),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Not"),
+                          ),
+                        ],
+                      );
+                    }
+                  ),
+                ),
+
+
+              ],
+            ),
         ],
-      ),
+      )
      ),
+
     );
   }
 }

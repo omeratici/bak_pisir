@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
+import 'package:bak_pisir/FoodsCevap.dart';
+import 'package:bak_pisir/tarifSayfasi.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'Foods.dart';
 import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
@@ -7,9 +11,9 @@ import 'assets/db_icons.dart';
 
 class FoodList extends StatefulWidget{
   
-  String foodtypeName;
+  int  typeId;
   Users aktifKullanici;
-  FoodList(this.foodtypeName,this.aktifKullanici);
+  FoodList(this.typeId,this.aktifKullanici);
   @override
   State<FoodList> createState() => _FoodListState();
   }
@@ -17,15 +21,41 @@ class FoodList extends StatefulWidget{
 
 class _FoodListState extends State<FoodList>{
   var scaffoldKey = GlobalKey<ScaffoldState>();
-  var a = Foods(1, "ecipe", "foodImage", "1", "Mercimek", 1);
-  var b = Foods(1, "ecipe", "foodImage", "1", "Şehriye", 1);
-  var c = Foods(1, "ecipe", "foodImage", "1", "Ayran Çorbası", 1);
-  late List<Foods> foodsList =[a,b,c];
+
+  late List<Foods> foodsList =[];
 
 
+  Future<List<Foods>> GetFoods(String foodType) async {
+    var url = Uri.parse("http://213.14.130.80/bakpisir/getFoods.php");
+    print("giden type id;");
+    print(widget.typeId.toString());
+    var veri ={"typeId": widget.typeId.toString()};
+    var cevap = await http.post(url,body:veri);
+    print("gelen cevap");
+    print(cevap.toString());
+    return parseFoodsCevap(cevap.body);
+  }
 
+  List<Foods> parseFoodsCevap(String cevap) {
+    var jsonVeri = json.decode(cevap);
+    print("gelen cevap");
+    print(cevap.toString());
 
+    if (jsonVeri["success"] as int == 1) {
+      var foodsCevap = FoodsCevap.fromJson(jsonVeri);
+      foodsList = foodsCevap.foodList;
+      setState((){
 
+      });
+    }
+    return foodsList;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+   GetFoods(widget.typeId.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +105,7 @@ class _FoodListState extends State<FoodList>{
                     child: Image.network("http://213.14.130.80/bakpisir/sebzeler/kabak.jpg")),
                 GestureDetector(
                   onTap: (){
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici,foodsList[index])));
                   },
                   child: Container(
                     alignment: Alignment.center,
