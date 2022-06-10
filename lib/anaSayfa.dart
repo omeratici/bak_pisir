@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bak_pisir/BakpisirStrings.dart';
 import 'package:bak_pisir/FoodList.dart';
 import 'package:bak_pisir/Foodtypes.dart';
 import 'package:bak_pisir/Widgets/MyDrawer.dart';
@@ -23,29 +24,26 @@ class anaSAyfa extends StatefulWidget {
 class _anaSAyfaState extends State<anaSAyfa> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   List<Foodtypes> typesList = [];
+  var baseUrl = BakpisirStrings().baseUrl;
+
 
   List<Foodtypes> parsetypesCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
-    print("******");
-    print(jsonVeri);
     if (jsonVeri["success"] as int == 1) {
       var typesCevap = FoodtypesCevap.fromJson(jsonVeri);
       typesList = typesCevap.typesList;
       setState(() {});
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Yemek Türleri Yüklenemedi Tekrar Deneyin")),
+        const SnackBar(content: Text("Yemek Türleri Yüklenemedi Tekrar Deneyin")),
       );
     }
     return typesList;
   }
 
   Future<List<Foodtypes>> typesGet() async {
-    print("typeGet çalıştı");
-    var url = Uri.parse("http://213.14.130.80/bakpisir/FoodtypesGet.php");
+    var url = Uri.parse(baseUrl+"FoodtypesGet.php");
     var cevap = await http.get(url);
-    print("typeGet Cevap:");
-    print(cevap.body);
     return parsetypesCevap(cevap.body);
   }
 
@@ -100,7 +98,7 @@ class _anaSAyfaState extends State<anaSAyfa> {
           drawer: MyDrawer(widget.aktifKullnaici),
           key: scaffoldKey,
           body: GridView.builder(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
                 childAspectRatio: 3 / 2,
                 crossAxisSpacing: 20,

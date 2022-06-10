@@ -5,7 +5,10 @@ import 'package:bak_pisir/CommentsCevap.dart';
 import 'package:bak_pisir/Users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'BakpisirStrings.dart';
 import 'Foods.dart';
+import 'Ingredients.dart';
+import 'IngredientsCevap.dart';
 import 'Widgets/MyDrawer.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,9 +29,11 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
   double evaluationGrade = 2.5;
   var comment = TextEditingController();
   List<Comments> commentsList = [];
+  List<Ingredients> food_ingredientsList = [];
+  var baseUrl = BakpisirStrings().baseUrl;
 
   Future<List<Comments>> getComments(String foodID) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/getComments.php");
+    var url = Uri.parse(baseUrl+"getComments.php");
     var veri ={"foodID": widget.food.foodID.toString()};
     var cevap = await http.post(url,body:veri);
     return parseCommentsCevap(cevap.body);
@@ -57,7 +62,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
   }
 
   Future<int> insertComments(String foodID, String comment,String point, String userID,) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/insert_Comments.php");
+    var url = Uri.parse(baseUrl+"insert_Comments.php");
     var veri = {
       "foodID": foodID,
       "comment": comment,
@@ -144,11 +149,39 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
             ));
   }
 
+  Future<List<Ingredients>> GetFood_ingredients(String foodID) async {
+    var url = Uri.parse(baseUrl+"getFood_ingredients.php");
+    var veri ={"foodID": widget.food.foodID.toString()};
+    var cevap = await http.post(url,body:veri);
+    return parseFood_ingredientsCevap(cevap.body);
+  }
+
+  List<Ingredients> parseFood_ingredientsCevap(String cevap) {
+    print("gelen cevap parseFood_ingredientsCevap 1");
+    print(cevap.isEmpty);
+    var jsonVeri = json.decode(cevap);
+    print("gelen cevap parseFood_ingredientsCevap");
+    print(cevap.isEmpty);
+
+    if (jsonVeri["success"] as int == 1) {
+      var ingredientsCevap = IngredientsCevap.fromJson(jsonVeri);
+      food_ingredientsList = ingredientsCevap.IngredientsList;
+    }
+    return food_ingredientsList;
+  }
+
+  Future<void> Food_ingredients_Goster() async {
+    food_ingredientsList =
+    await GetFood_ingredients(widget.food.foodID.toString());
+    //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
     commentsGoster();
+    Food_ingredients_Goster();
   }
 
   @override
@@ -168,7 +201,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
           children: [
             SizedBox(
                 width: ekranGenisligi/1.5,
-                child: Image.network("http://213.14.130.80/bakpisir/sebzeler/mantar.jpg"),
+                child: Image.network(baseUrl+"sebze/mantar.jpg"),
             ),
             Row(
               children: [
@@ -186,9 +219,20 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
 
                         ),
                         onPressed: (){
+                          bool check= false;
+                          for(var i in commentsList ){
+                            if(i.userID == widget.aktifKullanici.userId){
+                              check = true;
+                            }
+                          }
+                          if(check){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Daha önce yorum yapmışsınız.")),
+                            );
+                          }else{
+                            openDialog();
+                          }
 
-                          // todo yorum yapan kişinin tekrar yorum yapmasını engelle
-                          openDialog();
                         },
                       ),
                     ),
@@ -241,6 +285,64 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                     Yazi("Tarif Yazarı : "+widget.food.authorName, ekranGenisligi/25),
                   ],
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Malzemeler;"),
+                ),
+
+                SizedBox(
+                  height: 50 ,
+                  child: ListView.builder(
+
+                      itemCount: food_ingredientsList.length,
+                      itemBuilder: (context,index){
+                        return Row(
+                          children: [
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(food_ingredientsList[index].ingName),
+                            ),
+                          ],
+                        );
+                      }
+                  ),
+                ),
+
+               /*
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Malzemeler;"),
+                      ),
+                    ),
+                    GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 3 / 1),
+                        itemCount: food_ingredientsList.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                Image.network(baseUrl+"${food_ingredientsList[index].ingType}/${food_ingredientsList[index].ingImage}"),
+                                Text("-${food_ingredientsList[index].ingName}"),
+
+                              ],
+                            ),
+                          );
+                        }
+
+                    ),
+                  ],
+                ),
+
+                */
               ],
             ),
           ),

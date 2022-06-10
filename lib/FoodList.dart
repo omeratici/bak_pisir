@@ -4,6 +4,7 @@ import 'package:bak_pisir/FoodsCevap.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'BakpisirStrings.dart';
 import 'Foods.dart';
 import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
@@ -21,12 +22,12 @@ class FoodList extends StatefulWidget{
 
 class _FoodListState extends State<FoodList>{
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
+  var baseUrl = BakpisirStrings().baseUrl;
   late List<Foods> foodsList =[];
 
 
   Future<List<Foods>> GetFoods(String foodType) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/getFoods.php");
+    var url = Uri.parse(baseUrl+"getFoods.php");
     print("giden type id;");
     print(widget.typeId.toString());
     var veri ={"typeId": widget.typeId.toString()};
@@ -102,7 +103,7 @@ class _FoodListState extends State<FoodList>{
                 SizedBox(
                   width:50,
                     height: 50,
-                    child: Image.network("http://213.14.130.80/bakpisir/sebzeler/kabak.jpg")),
+                    child: Image.network(baseUrl+"sebze/kabak.jpg")),
                 GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici,foodsList[index])));

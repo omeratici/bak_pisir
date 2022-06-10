@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'BakpisirStrings.dart';
 import 'Users.dart';
 import 'UsersCevap.dart';
 import 'dolabim.dart';
@@ -42,6 +43,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var aktifKullanici;
   String _errorMessage = '';
+  var baseUrl = BakpisirStrings().baseUrl;
 
   Users parseUsersCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
@@ -55,7 +57,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
   }
 
   Future<Users> userGet(String a, String b) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/Usersget3.php");
+    var url = Uri.parse(baseUrl+"Usersget3.php");
     var veri = {"userName": a, "password": b};
     var cevap = await http.post(url, body: veri);
 

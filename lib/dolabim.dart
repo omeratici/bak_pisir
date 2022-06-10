@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bak_pisir/MyIngredients.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'BakpisirStrings.dart';
 import 'Ingredients.dart';
 import 'IngredientsCevap.dart';
 import 'MyIngredientsCevap.dart';
@@ -29,9 +30,11 @@ class _dolabimState extends State<dolabim> {
   late String dropdownturListDeger =turList.first;
   late Ingredients dropdownDeger;
   late List<Ingredients> dropdownList;
+  var baseUrl = BakpisirStrings().baseUrl;
 
   Future<List<MyIngredients>> MyIngredientsGet(String a) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/MyIngredientsGet.php");
+
+    var url = Uri.parse(baseUrl+"MyIngredientsGet.php");
     var veri = {"userID": a};
     var cevap = await http.post(url, body: veri);
     return parseMyIngredientsCevap(cevap.body);
@@ -56,7 +59,8 @@ class _dolabimState extends State<dolabim> {
   }
 
   Future<void> insertMyIngredients(String userID, String ingID) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/insert_MyIngredients.php");
+    var baseUrl = BakpisirStrings().baseUrl;
+    var url = Uri.parse(baseUrl+"insert_MyIngredients.php");
     var veri = {
       "userID": userID,
       "ingID": ingID,
@@ -78,7 +82,7 @@ class _dolabimState extends State<dolabim> {
   }
 
   Future<void> deleteMyIngredients(String myingID) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/delete_MyIngredients.php");
+    var url = Uri.parse(baseUrl+"delete_MyIngredients.php");
     var veri = {
       "myingID": myingID,
     };
@@ -101,7 +105,7 @@ class _dolabimState extends State<dolabim> {
   }
 
   Future<List<Ingredients>> IngredientsGet() async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/IngredientsGet.php");
+    var url = Uri.parse(baseUrl+"IngredientsGet.php");
     var cevap = await http.get(url);
     return parseIngredientsCevap(cevap.body);
   }
@@ -266,7 +270,7 @@ class _dolabimState extends State<dolabim> {
                                 });
                               },
                             ),
-                            Image.network("http://213.14.130.80/bakpisir/sebzeler/${myingredientsList[index].ingImage}"),
+                            Image.network(baseUrl+"${myingredientsList[index].ingType}/${myingredientsList[index].ingImage}"),
                             Text("-${myingredientsList[index].ingName}"),
 
                           ],

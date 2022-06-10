@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bak_pisir/BakpisirStrings.dart';
 import 'package:bak_pisir/mailOnay.dart';
 import 'package:bak_pisir/main.dart';
 import 'package:email_validator/email_validator.dart';
@@ -28,15 +29,16 @@ class _uyeOlState extends State<uyeOl> {
   var tfKSifreTekrar = TextEditingController();
   var scaffoldKey = GlobalKey<ScaffoldState>();
   String _errorMessage = '';
+  var baseUrl = BakpisirStrings().baseUrl;
 
   Future<void> insertUser(
       String userName, String password, String email) async {
-    var url = Uri.parse("http://213.14.130.80/bakpisir/insert_user.php");
-    var veri = {
-      "userName": userName,
-      "password": password,
-      "email": email,
-      "userRole": "0"
+        var url = Uri.parse(baseUrl+"insert_user.php");
+        var veri = {
+          "userName": userName,
+          "password": password,
+          "email": email,
+          "userRole": "0"
     };
     var cevap = await http.post(url, body: veri);
     var jsonVeri = json.decode(cevap.body);
@@ -55,15 +57,15 @@ class _uyeOlState extends State<uyeOl> {
   Widget build(BuildContext context) {
     {
       return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/kayit.png'), fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Stack(children: [
             Container(
-              padding: EdgeInsets.only(left: 35, top: 100),
-              child: Text(
+              padding: const EdgeInsets.only(left: 35, top: 100),
+              child: const Text(
                 "Hesap\nOluştur",
                 style: TextStyle(color: Colors.white, fontSize: 33),
               ),
