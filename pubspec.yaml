@@ -82,6 +82,9 @@ flutter:
      - family: DBIcons
        fonts:
          - asset: assets/Icons/DBIcons.ttf
+     - family: Hellix
+       fonts:
+         - asset: assets/Icons/Hellix-Bold.ttf
          
   #   - family: Trajan Pro
   #     fonts:
@@ -91,3 +94,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+ 
+    

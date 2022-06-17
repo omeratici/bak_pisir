@@ -15,9 +15,9 @@ import 'package:http/http.dart' as http;
 class tarifSayfasi extends StatefulWidget {
   Foods food;
   Users aktifKullanici;
-  tarifSayfasi(this.aktifKullanici,this.food);
+  tarifSayfasi(this.aktifKullanici, this.food);
 
- // const tarifSayfasi({Key? key}) : super(key: key);
+  // const tarifSayfasi({Key? key}) : super(key: key);
 
   @override
   State<tarifSayfasi> createState() => _tarifSayfasiState();
@@ -33,9 +33,9 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
   var baseUrl = BakpisirStrings().baseUrl;
 
   Future<List<Comments>> getComments(String foodID) async {
-    var url = Uri.parse(baseUrl+"getComments.php");
-    var veri ={"foodID": widget.food.foodID.toString()};
-    var cevap = await http.post(url,body:veri);
+    var url = Uri.parse(baseUrl + "getComments.php");
+    var veri = {"foodID": widget.food.foodID.toString()};
+    var cevap = await http.post(url, body: veri);
     return parseCommentsCevap(cevap.body);
   }
 
@@ -50,19 +50,22 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
       var commentsCevap = CommentsCevap.fromJson(jsonVeri);
       commentsList = commentsCevap.commentsList;
       double toplam = 0;
-      for(var i in commentsList){
-        toplam = i.point+toplam;
+      for (var i in commentsList) {
+        toplam = i.point + toplam;
       }
-      averageScore = toplam/commentsList.length;
-      setState((){
-
-      });
+      averageScore = toplam / commentsList.length;
+      setState(() {});
     }
     return commentsList;
   }
 
-  Future<int> insertComments(String foodID, String comment,String point, String userID,) async {
-    var url = Uri.parse(baseUrl+"insert_Comments.php");
+  Future<int> insertComments(
+    String foodID,
+    String comment,
+    String point,
+    String userID,
+  ) async {
+    var url = Uri.parse(baseUrl + "insert_Comments.php");
     var veri = {
       "foodID": foodID,
       "comment": comment,
@@ -87,35 +90,31 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
   }
 
   Future<void> commentsGoster() async {
-    commentsList =
-    await getComments(widget.food.foodID.toString());
+    commentsList = await getComments(widget.food.foodID.toString());
     //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
     setState(() {});
   }
 
-  Future <String?> openDialog()async {
-    showDialog <String>(
+  Future<String?> openDialog() async {
+    showDialog<String>(
         context: context,
-        builder: (context) =>
-            AlertDialog(
-                content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+        builder: (context) => AlertDialog(
+                content: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
                   return SizedBox(
-                    height: MediaQuery.of(context).size.height*0.5,
-                    width: MediaQuery.of(context).size.height*0.8,
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: MediaQuery.of(context).size.height * 0.8,
                     child: Column(
                       children: [
                         Text("Yorumunuzu Yazınız"),
-
                         SizedBox(
                             height: 200,
                             child: TextField(
                               controller: comment,
                               decoration: const InputDecoration(
-                                  hintText: "Yorum yazınız"
-                              ),
+                                  hintText: "Yorum yazınız"),
                             )),
                         Text("Yemek tarifi için puan veriniz"),
-
                         RatingBar.builder(
                           initialRating: evaluationGrade,
                           minRating: 1,
@@ -128,31 +127,33 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                             color: Colors.amber,
                           ),
                           onRatingUpdate: (rating) {
-                            evaluationGrade =rating;
+                            evaluationGrade = rating;
                           },
                         ),
                       ],
                     ),
                   );
                 }),
-
                 title: const Text("Yorum Yapınız..."),
-
                 actions: [
-                  TextButton(onPressed: (){
-                    Future<int> response = insertComments(widget.food.foodID.toString(), comment.text, evaluationGrade.toString(), widget.aktifKullanici.userId.toString());
+                  TextButton(
+                      onPressed: () {
+                        Future<int> response = insertComments(
+                            widget.food.foodID.toString(),
+                            comment.text,
+                            evaluationGrade.toString(),
+                            widget.aktifKullanici.userId.toString());
 
-                    Navigator.of(context).pop();
-                  },
+                        Navigator.of(context).pop();
+                      },
                       child: const Text("Ekle"))
-                ]
-            ));
+                ]));
   }
 
   Future<List<Ingredients>> GetFood_ingredients(String foodID) async {
-    var url = Uri.parse(baseUrl+"getFood_ingredients.php");
-    var veri ={"foodID": widget.food.foodID.toString()};
-    var cevap = await http.post(url,body:veri);
+    var url = Uri.parse(baseUrl + "getFood_ingredients.php");
+    var veri = {"foodID": widget.food.foodID.toString()};
+    var cevap = await http.post(url, body: veri);
     return parseFood_ingredientsCevap(cevap.body);
   }
 
@@ -172,7 +173,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
 
   Future<void> Food_ingredients_Goster() async {
     food_ingredientsList =
-    await GetFood_ingredients(widget.food.foodID.toString());
+        await GetFood_ingredients(widget.food.foodID.toString());
     //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
     setState(() {});
   }
@@ -191,125 +192,162 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
     final double ekranGenisligi = ekranBilgisi.size.width;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.red.shade300,
         title: Text("Bak Pişir - Tafir"),
       ),
       drawer: MyDrawer(widget.aktifKullanici),
-      key:scaffoldKey,
-
+      key: scaffoldKey,
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-                width: ekranGenisligi/1.5,
-                child: Image.network(baseUrl+"sebze/mantar.jpg"),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: ekranGenisligi/8,
-                      child: TextButton(
-
-                        child: Yazi("Yorum Yap", ekranGenisligi/25),
-                        style:TextButton.styleFrom(
-                          backgroundColor: Colors.deepOrangeAccent,
-                          primary: Colors.black,
-
-                        ),
-                        onPressed: (){
-                          bool check= false;
-                          for(var i in commentsList ){
-                            if(i.userID == widget.aktifKullanici.userId){
-                              check = true;
-                            }
-                          }
-                          if(check){
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Daha önce yorum yapmışsınız.")),
-                            );
-                          }else{
-                            openDialog();
-                          }
-
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      height: ekranGenisligi/8,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Ortalama Puan"),
-                          RatingBarIndicator(
-                            rating: averageScore,
-                            itemBuilder: (context, index) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            itemCount: 5,
-                            itemSize: 15.0,
-                            direction: Axis.horizontal,
-                          ),
-                          Text(averageScore.toStringAsFixed(1)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: ekranGenisligi / 1.5,
           ),
-
-          Padding(
-            padding:  EdgeInsets.all(ekranYuksekligi/100),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(widget.food.foodName,
+          Column(
+            children: [
+              SizedBox(
+                height: 24,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 1.2,
+                child: Text(
+                  widget.food.foodName,
                   style: TextStyle(
-                    color: Colors.deepOrangeAccent,
-                    fontWeight: FontWeight.bold,
-                    fontSize: ekranGenisligi/20,
-                  ),
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 36,
+                      fontFamily: "Hellix"),
                 ),
-                Row(
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Spacer(),
-                    Yazi("Tarif Yazarı : "+widget.food.authorName, ekranGenisligi/25),
+                    Icon(
+                      Icons.app_registration,
+                      color: Colors.red.shade300,
+                      size: 36,
+                    ),
+                    Text(
+                      " Yazar : " + widget.food.authorName,
+                      style: TextStyle(
+                          color: Colors.red.shade300,
+                          fontSize: 36,
+                          fontFamily: "Hellix"),
+                    ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Malzemeler;"),
-                ),
-
-                SizedBox(
-                  height: 50 ,
-                  child: ListView.builder(
-
-                      itemCount: food_ingredientsList.length,
-                      itemBuilder: (context,index){
-                        return Row(
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 15),
+                child: Row(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2.9,
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(food_ingredientsList[index].ingName),
+                            Text(
+                              "Kalori",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey,
+                                fontFamily: "Hellix",
+                              ),
                             ),
-                          ],
-                        );
-                      }
-                  ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text("120 Kalori",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontFamily: "Hellix",
+                                )),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            Text(
+                              "Süre",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey,
+                                fontFamily: "Hellix",
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text("1 Saat",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontFamily: "Hellix",
+                                )),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            Text(
+                              "Malzemeler",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.grey,
+                                fontFamily: "Hellix",
+                              ),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            SizedBox(
+                              height: 50,
+                              width: 70,
+                              child: ListView.builder(
+                                  itemCount: food_ingredientsList.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          food_ingredientsList[index].ingName,
+                                          style: TextStyle(
+                                            fontSize: 19.0,
+                                            fontFamily: "Hellix",
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                            ),
+                          ]),
+                    ),
+                    Image.network(
+                      baseUrl + "sebze/mantar.jpg",
+                      height: 250.0,
+                      fit: BoxFit.contain,
+                    ),
+                  ],
                 ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Tarif",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontFamily: "Hellix",
+                      fontSize: 28.0,
+                    ),
+                  ),
+                ],
+              ),
 
-               /*
+              /*
                 Row(
                   children: [
                     SizedBox(
@@ -343,50 +381,162 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                 ),
 
                 */
-              ],
-            ),
+            ],
           ),
           Padding(
-            padding:  EdgeInsets.all(ekranYuksekligi/100),
-            child: Yazi(widget.food.recipe, ekranGenisligi/25),
-         ),
-            Column(
+              padding: EdgeInsets.all(ekranYuksekligi / 100),
+              child: Text(
+                widget.food.recipe,
+                style: TextStyle(fontFamily: "Hellix", fontSize: 16),
+              )),
+          SizedBox(
+            height: 24,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 5),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 400 ,
+                  height: 400,
                   child: ListView.builder(
-
-                    itemCount: commentsList.length,
-                    itemBuilder: (context,index){
-                      return Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("Yorum Yapan İsim"+commentsList[index].userName),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(commentsList[index].comment),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(commentsList[index].point.toString()),
-                          ),
-                        ],
-                      );
-                    }
-                  ),
+                      itemCount: commentsList.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Yorumlar",
+                              style: TextStyle(
+                                fontFamily: "Hellix",
+                                fontSize: 28.0,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  color: Colors.red.shade300,
+                                ),
+                                Text(
+                                  commentsList[index].userName,
+                                  style: TextStyle(
+                                      fontFamily: "Hellix",
+                                      fontSize: 21,
+                                      color: Colors.red.shade500),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              commentsList[index].comment,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: "Hellix",
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            RatingBarIndicator(
+                              rating: commentsList[index].point,
+                              itemBuilder: (context, index) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                              itemCount: 5,
+                              itemSize: 25.0,
+                              direction: Axis.horizontal,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              commentsList[index].point.toStringAsFixed(1),
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(fontFamily: "Hellix", fontSize: 15),
+                            ),
+                          ],
+                        );
+                      }),
                 ),
-
-
               ],
             ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: ekranGenisligi / 8,
+                    child: TextButton(
+                      child: Yazi("Yorum Yap", ekranGenisligi / 25),
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.red.shade400,
+                        primary: Colors.white,
+                      ),
+                      onPressed: () {
+                        bool check = false;
+                        for (var i in commentsList) {
+                          if (i.userID == widget.aktifKullanici.userId) {
+                            check = true;
+                          }
+                        }
+                        if (check) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text("Daha önce yorum yapmışsınız.")),
+                          );
+                        } else {
+                          openDialog();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: ekranGenisligi / 8,
+                    child: Column(
+                      children: [
+                        Text(
+                          "Ortalama Puan",
+                          style: TextStyle(fontSize: 16, fontFamily: "Hellix"),
+                        ),
+                        RatingBarIndicator(
+                          rating: averageScore,
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 15.0,
+                          direction: Axis.horizontal,
+                        ),
+                        Text(averageScore.toStringAsFixed(1),
+                            style:
+                                TextStyle(fontSize: 12, fontFamily: "Hellix")),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
-      )
-     ),
-
+      )),
     );
   }
 }
@@ -395,10 +545,13 @@ class Yazi extends StatelessWidget {
   String icerik;
   double yaziBoyut;
 
- Yazi(this.icerik, this.yaziBoyut);
+  Yazi(this.icerik, this.yaziBoyut);
 
   @override
   Widget build(BuildContext context) {
-    return Text(icerik,style: TextStyle(fontSize: yaziBoyut),);
+    return Text(
+      icerik,
+      style: TextStyle(fontSize: yaziBoyut),
+    );
   }
 }
