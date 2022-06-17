@@ -79,21 +79,6 @@ class _anaSAyfaState extends State<anaSAyfa> {
                 end: Alignment.topLeft,
               )),
             ),
-            bottom:
-                TabBar(indicatorColor: Colors.white, indicatorWeight: 3, tabs: [
-              Tab(icon: Icon(Icons.home), text: 'Anasayfa'
-
-              ),
-              Tab(icon: Icon(DBIcons.fridge), text: 'Dolabım'
-
-              ),
-              Tab(icon: Icon(Icons.book_sharp), text: 'Tariflerim'
-
-              ),
-              Tab(icon: Icon(Icons.settings), text: 'Ayarlar'
-
-              ),
-            ]),
           ),
           drawer: MyDrawer(widget.aktifKullnaici),
           key: scaffoldKey,
@@ -111,7 +96,13 @@ class _anaSAyfaState extends State<anaSAyfa> {
                 },
                 child: Container(
                   alignment: Alignment.center,
-                  child: Text(typesList[index].typeName),
+                  height: double.infinity,
+
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/loading.gif',
+                    image: baseUrl+"food_type/"+typesList[index].typeImage, fit: BoxFit.contain,
+                    width: 300,
+                  ),
                   decoration: BoxDecoration(
                       color: Colors.amber,
                       borderRadius: BorderRadius.circular(15)),

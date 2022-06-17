@@ -118,9 +118,9 @@ class _dolabimState extends State<dolabim> {
       ingredientsList = ingredientsCevap.IngredientsList;
       dropdownList = ingredientsList;
       dropdownDeger = dropdownList[0];
-     // turList.clear();
+      turList.clear();
       for (var i in ingredientsList){
-        turList.add(i.ingType);
+        turList.add(i.ingTypeName);
       }
     }
     return ingredientsList;
@@ -150,8 +150,8 @@ class _dolabimState extends State<dolabim> {
                           ),
                           onChanged: (String? newValue) {
                             Iterable<Ingredients> filtrele = ingredientsList.where((element) {
-                              print("----- ${element.ingType}");
-                              return element.ingType==newValue;
+                              print("----- ${element.ingTypeID}");
+                              return element.ingTypeID==newValue;
                             });
                             dropdownList = filtrele.toList();
                             dropdownDeger=dropdownList[0];
@@ -270,7 +270,7 @@ class _dolabimState extends State<dolabim> {
                                 });
                               },
                             ),
-                            Image.network(baseUrl+"${myingredientsList[index].ingType}/${myingredientsList[index].ingImage}"),
+                            Image.network(baseUrl+"sebze/${myingredientsList[index].ingImage}"),
                             Text("-${myingredientsList[index].ingName}"),
 
                           ],
