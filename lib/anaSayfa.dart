@@ -26,7 +26,6 @@ class _anaSAyfaState extends State<anaSAyfa> {
   List<Foodtypes> typesList = [];
   var baseUrl = BakpisirStrings().baseUrl;
 
-
   List<Foodtypes> parsetypesCevap(String cevap) {
     var jsonVeri = json.decode(cevap);
     if (jsonVeri["success"] as int == 1) {
@@ -35,14 +34,15 @@ class _anaSAyfaState extends State<anaSAyfa> {
       setState(() {});
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Yemek Türleri Yüklenemedi Tekrar Deneyin")),
+        const SnackBar(
+            content: Text("Yemek Türleri Yüklenemedi Tekrar Deneyin")),
       );
     }
     return typesList;
   }
 
   Future<List<Foodtypes>> typesGet() async {
-    var url = Uri.parse(baseUrl+"FoodtypesGet.php");
+    var url = Uri.parse(baseUrl + "FoodtypesGet.php");
     var cevap = await http.get(url);
     return parsetypesCevap(cevap.body);
   }
@@ -83,30 +83,34 @@ class _anaSAyfaState extends State<anaSAyfa> {
           drawer: MyDrawer(widget.aktifKullnaici),
           key: scaffoldKey,
           body: GridView.builder(
+            padding: EdgeInsets.all(8.0),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
+                maxCrossAxisExtent: 300,
                 childAspectRatio: 3 / 2,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20),
             itemCount: typesList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => FoodList(typesList[index].typeId,widget.aktifKullnaici)));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FoodList(
+                              typesList[index].typeId, widget.aktifKullnaici)));
                 },
                 child: Container(
                   alignment: Alignment.center,
                   height: double.infinity,
-
                   child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/loading.gif',
-                    image: baseUrl+"food_type/"+typesList[index].typeImage, fit: BoxFit.contain,
+                    placeholder: 'assets/bakpisir3.png',
+                    image: baseUrl + "food_type/" + typesList[index].typeImage,
+                    fit: BoxFit.fill,
                     width: 300,
                   ),
                   decoration: BoxDecoration(
                       color: Colors.amber,
-                      borderRadius: BorderRadius.circular(15)),
-
+                      borderRadius: BorderRadius.circular(25)),
                 ),
               );
             },

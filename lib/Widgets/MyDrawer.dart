@@ -1,4 +1,3 @@
-
 import 'package:bak_pisir/anaSayfa.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
 import 'package:flutter/material.dart';
@@ -9,71 +8,81 @@ import '../dolabim.dart';
 class MyDrawer extends StatefulWidget {
   Users aktifKullanici;
   MyDrawer(this.aktifKullanici);
- // const MyDrawer({Key? key}) : super(key: key);
+  // const MyDrawer({Key? key}) : super(key: key);
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-
           DrawerHeader(
-            child: Text("BakPişir"),
+            child: Text(
+              "BakPişir",
+              style: TextStyle(
+                  color: Colors.red.shade600,
+                  fontFamily: "Hellix",
+                  fontSize: 22),
+            ),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              image: DecorationImage(
+                image: AssetImage("assets/bakpisir2.png"),
+                fit: BoxFit.scaleDown,
+              ),
+              color: Colors.red.shade300,
             ),
           ),
           ListTile(
-            title: Text("Ana Sayfa"),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => anaSAyfa(aktifKullnaici: widget.aktifKullanici)));
-            }
-
-          ),
+              title: Text("Ana Sayfa"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            anaSAyfa(aktifKullnaici: widget.aktifKullanici)));
+              }),
           Divider(
             height: 1.0,
-            color:Colors.blueGrey,
+            color: Colors.blueGrey,
           ),
           ListTile(
             title: Text("Dolabımda Neler Var?"),
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => dolabim(widget.aktifKullanici)));
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => dolabim(widget.aktifKullanici)));
             },
           ),
           ListTile(
             title: Text("Tarif Yaz"),
-            onTap: (){
-          //    Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
+            onTap: () {
+              //    Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
             },
           ),
           ListTile(
             title: Text("Favori Tariflerim"),
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
-
             },
           ),
           ListTile(
             title: Text("Dolabımdakilerle hangi yemekleri yapabilirim"),
-            onTap: (){
-
+            onTap: () {
               Navigator.pop(context);
             },
           ),
           ListTile(
             title: Text("Alışveriş Listem"),
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
             },
           ),
-
         ],
       ),
     );

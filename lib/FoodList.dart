@@ -10,28 +10,25 @@ import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
 import 'assets/db_icons.dart';
 
-class FoodList extends StatefulWidget{
-  
-  int  typeId;
+class FoodList extends StatefulWidget {
+  int typeId;
   Users aktifKullanici;
-  FoodList(this.typeId,this.aktifKullanici);
+  FoodList(this.typeId, this.aktifKullanici);
   @override
   State<FoodList> createState() => _FoodListState();
-  }
+}
 
-
-class _FoodListState extends State<FoodList>{
+class _FoodListState extends State<FoodList> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var baseUrl = BakpisirStrings().baseUrl;
-  late List<Foods> foodsList =[];
-
+  late List<Foods> foodsList = [];
 
   Future<List<Foods>> GetFoods(String foodType) async {
-    var url = Uri.parse(baseUrl+"getFoods.php");
+    var url = Uri.parse(baseUrl + "getFoods.php");
     print("giden type id;");
     print(widget.typeId.toString());
-    var veri ={"typeId": widget.typeId.toString()};
-    var cevap = await http.post(url,body:veri);
+    var veri = {"typeId": widget.typeId.toString()};
+    var cevap = await http.post(url, body: veri);
     print("gelen cevap");
     print(cevap.toString());
     return parseFoodsCevap(cevap.body);
@@ -45,9 +42,7 @@ class _FoodListState extends State<FoodList>{
     if (jsonVeri["success"] as int == 1) {
       var foodsCevap = FoodsCevap.fromJson(jsonVeri);
       foodsList = foodsCevap.foodList;
-      setState((){
-
-      });
+      setState(() {});
     }
     return foodsList;
   }
@@ -55,12 +50,11 @@ class _FoodListState extends State<FoodList>{
   @override
   void initState() {
     super.initState();
-   GetFoods(widget.typeId.toString());
+    GetFoods(widget.typeId.toString());
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Ana Sayfa"),
@@ -77,53 +71,102 @@ class _FoodListState extends State<FoodList>{
         ],
         backgroundColor: Colors.red.shade300,
         flexibleSpace: Container(
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.purple.shade500, Colors.red.shade500],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-              )),
+            colors: [Colors.purple.shade500, Colors.red.shade500],
+            begin: Alignment.bottomRight,
+            end: Alignment.topLeft,
+          )),
         ),
-
       ),
       drawer: MyDrawer(widget.aktifKullanici),
       key: scaffoldKey,
       body: GridView.builder(
-
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 2 / 1),
+            crossAxisCount: 2, childAspectRatio: 2 / 1.9),
         padding: const EdgeInsets.all(8.0),
         itemCount: foodsList.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  width:50,
-                    height: 50,
-                    child: Image.network(baseUrl+"sebze/kabak.jpg")),
-                GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici,foodsList[index])));
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Text(foodsList[index].foodName),
-                    decoration: BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.circular(15)),
-
+          return Container(
+            width: 300,
+            height: 150,
+            decoration: BoxDecoration(
+                color: Colors.red.shade100,
+                borderRadius: BorderRadius.circular(25)),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: Image.network(
+                          baseUrl + "sebze/kabak.jpg",
+                          width: 80,
+                          alignment: Alignment.topRight,
+                        ),
+                      ),
+                      Text(
+                        "Çorbalar",
+                        style: TextStyle(
+                            fontFamily: "Hellix",
+                            fontSize: 19,
+                            color: Colors.red.shade400),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => tarifSayfasi(
+                                  widget.aktifKullanici, foodsList[index])));
+                    },
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        foodsList[index].foodName,
+                        style: TextStyle(fontFamily: "Hellix", fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text("Rating"),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    "120 Kalori",
+                    style: TextStyle(
+                        fontFamily: "Hellix",
+                        fontSize: 13,
+                        color: Colors.red.shade400),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    children: [
+                      Text("20 Dakika"),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("4 Kişilik"),
+                    ],
+                  )
+                ],
+              ),
             ),
           );
         },
       ),
     );
-
   }
-  
 }
