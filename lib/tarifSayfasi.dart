@@ -387,7 +387,8 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
               padding: EdgeInsets.all(ekranYuksekligi / 100),
               child: Text(
                 widget.food.recipe,
-                style: TextStyle(fontFamily: "Hellix", fontSize: 16),
+                style: TextStyle(
+                    fontFamily: "Hellix", fontSize: 16, color: Colors.grey),
               )),
           SizedBox(
             height: 24,

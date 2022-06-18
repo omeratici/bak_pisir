@@ -33,12 +33,12 @@ class _uyeOlState extends State<uyeOl> {
 
   Future<void> insertUser(
       String userName, String password, String email) async {
-        var url = Uri.parse(baseUrl+"insert_user.php");
-        var veri = {
-          "userName": userName,
-          "password": password,
-          "email": email,
-          "userRole": "0"
+    var url = Uri.parse(baseUrl + "insert_user.php");
+    var veri = {
+      "userName": userName,
+      "password": password,
+      "email": email,
+      "userRole": "0"
     };
     var cevap = await http.post(url, body: veri);
     var jsonVeri = json.decode(cevap.body);
@@ -63,6 +63,11 @@ class _uyeOlState extends State<uyeOl> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Stack(children: [
+            Image.asset(
+              'assets/bakpisir2.png',
+              width: 75,
+              height: 75,
+            ),
             Container(
               padding: const EdgeInsets.only(left: 35, top: 100),
               child: const Text(

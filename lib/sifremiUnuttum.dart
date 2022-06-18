@@ -20,6 +20,11 @@ class _sifremiUnuttumState extends State<sifremiUnuttum> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(children: [
+          Image.asset(
+            'assets/bakpisir2.png',
+            width: 75,
+            height: 75,
+          ),
           Container(
             padding: EdgeInsets.only(left: 35, top: 130),
             child: Text(

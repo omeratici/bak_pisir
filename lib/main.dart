@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class GirisEkrani extends StatefulWidget {
   @override
   State<GirisEkrani> createState() => _GirisEkraniState();
@@ -57,7 +56,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
   }
 
   Future<Users> userGet(String a, String b) async {
-    var url = Uri.parse(baseUrl+"Usersget3.php");
+    var url = Uri.parse(baseUrl + "Usersget3.php");
     var veri = {"userName": a, "password": b};
     var cevap = await http.post(url, body: veri);
 
@@ -70,7 +69,9 @@ class _GirisEkraniState extends State<GirisEkrani> {
       print(aktifKullanici.userId);
       print(aktifKullanici.userName);
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => anaSAyfa(aktifKullnaici:aktifKullanici)));
+          context,
+          MaterialPageRoute(
+              builder: (context) => anaSAyfa(aktifKullnaici: aktifKullanici)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Kullanıcı Adi veya Şifre Hatalı")),
@@ -102,11 +103,15 @@ class _GirisEkraniState extends State<GirisEkrani> {
           SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.5,
+                  top: MediaQuery.of(context).size.height * 0.33,
                   right: 35,
                   left: 35),
               child: Column(
                 children: [
+                  Image.asset('assets/bakpisir1.png', width: 300, height: 100),
+                  SizedBox(
+                    height: 24,
+                  ),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
@@ -196,7 +201,10 @@ class _GirisEkraniState extends State<GirisEkrani> {
                               fontSize: 18,
                               color: Color.fromRGBO(175, 68, 72, 1),
                             ),
-                          ))
+                          )),
+                      SizedBox(
+                        height: 30,
+                      ),
                     ],
                   )
                 ],
