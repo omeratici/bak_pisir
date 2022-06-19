@@ -148,8 +148,8 @@ class _dolabimState extends State<dolabim> {
                         onChanged: (String? newValue) {
                           Iterable<Ingredients> filtrele =
                               ingredientsList.where((element) {
-                            print("----- ${element.ingTypeID}");
-                            return element.ingTypeID == newValue;
+                            print("----- ${element.ingTypeName}");
+                            return element.ingTypeName == newValue;
                           });
                           dropdownList = filtrele.toList();
                           dropdownDeger = dropdownList[0];
