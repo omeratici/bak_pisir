@@ -103,14 +103,13 @@ class _anaSAyfaState extends State<anaSAyfa> {
                   alignment: Alignment.center,
                   height: double.infinity,
                   child: FadeInImage.assetNetwork(
-                    placeholder: 'assets/bakpisir3.png',
+                    placeholder: 'assets/load.gif',
                     image: baseUrl + "food_type/" + typesList[index].typeImage,
-                    fit: BoxFit.fill,
-                    width: 300,
+                    fit: BoxFit.cover,
+                    width: 200,
                   ),
-                  decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius: BorderRadius.circular(25)),
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(25)),
                 ),
               );
             },

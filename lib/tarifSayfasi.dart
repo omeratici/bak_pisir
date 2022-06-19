@@ -193,7 +193,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red.shade300,
-        title: Text("Bak Pişir - Tafir"),
+        title: Text("Bak Pişir - Tarif"),
       ),
       drawer: MyDrawer(widget.aktifKullanici),
       key: scaffoldKey,
@@ -234,7 +234,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                       size: 36,
                     ),
                     Text(
-                      " Yazar : " + widget.food.authorName,
+                      " : " + widget.food.authorName,
                       style: TextStyle(
                           color: Colors.red.shade300,
                           fontSize: 36,
@@ -291,7 +291,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                               height: 24,
                             ),
                             Text(
-                              "Malzemeler",
+                              "Kişi",
                               style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.grey,
@@ -301,24 +301,13 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                             SizedBox(
                               height: 4,
                             ),
+                            Text("4 Kişilik",
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  fontFamily: "Hellix",
+                                )),
                             SizedBox(
-                              height: 50,
-                              width: 70,
-                              child: ListView.builder(
-                                  itemCount: food_ingredientsList.length,
-                                  itemBuilder: (context, index) {
-                                    return Column(
-                                      children: [
-                                        Text(
-                                          food_ingredientsList[index].ingName,
-                                          style: TextStyle(
-                                            fontSize: 19.0,
-                                            fontFamily: "Hellix",
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }),
+                              height: 4,
                             ),
                           ]),
                     ),
@@ -334,11 +323,41 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                 height: 24,
               ),
               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
+                    "Malzemeler",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "Hellix",
+                      fontSize: 28.0,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 70,
+                    child: ListView.builder(
+                        itemCount: food_ingredientsList.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Text(
+                                food_ingredientsList[index].ingName,
+                                style: TextStyle(
+                                  fontSize: 19.0,
+                                  fontFamily: "Hellix",
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Text(
                     "Tarif",
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "Hellix",
                       fontSize: 28.0,
@@ -399,73 +418,77 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Text(
+                  "Yorumlar",
+                  style: TextStyle(
+                    fontFamily: "Hellix",
+                    fontSize: 28.0,
+                  ),
+                ),
                 SizedBox(
                   height: 400,
                   child: ListView.builder(
                       itemCount: commentsList.length,
                       itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Yorumlar",
-                              style: TextStyle(
-                                fontFamily: "Hellix",
-                                fontSize: 28.0,
+                        return Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                            bottom: BorderSide(
+                                width: 2, color: Colors.red.shade300),
+                          )),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 20,
                               ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.person,
-                                  color: Colors.red.shade300,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.person,
+                                    color: Colors.red.shade300,
+                                  ),
+                                  Text(
+                                    commentsList[index].userName,
+                                    style: TextStyle(
+                                        fontFamily: "Hellix",
+                                        fontSize: 21,
+                                        color: Colors.red.shade500),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  RatingBarIndicator(
+                                    rating: commentsList[index].point,
+                                    itemBuilder: (context, index) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 15.0,
+                                    direction: Axis.horizontal,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                commentsList[index].comment,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: "Hellix",
                                 ),
-                                Text(
-                                  commentsList[index].userName,
-                                  style: TextStyle(
-                                      fontFamily: "Hellix",
-                                      fontSize: 21,
-                                      color: Colors.red.shade500),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              commentsList[index].comment,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontFamily: "Hellix",
                               ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            RatingBarIndicator(
-                              rating: commentsList[index].point,
-                              itemBuilder: (context, index) => const Icon(
-                                Icons.star,
-                                color: Colors.amber,
+                              SizedBox(
+                                height: 5,
                               ),
-                              itemCount: 5,
-                              itemSize: 25.0,
-                              direction: Axis.horizontal,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              commentsList[index].point.toStringAsFixed(1),
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontFamily: "Hellix", fontSize: 15),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 5,
+                              ),
+                            ],
+                          ),
                         );
                       }),
                 ),
@@ -526,9 +549,6 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           itemSize: 15.0,
                           direction: Axis.horizontal,
                         ),
-                        Text(averageScore.toStringAsFixed(1),
-                            style:
-                                TextStyle(fontSize: 12, fontFamily: "Hellix")),
                       ],
                     ),
                   ),

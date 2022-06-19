@@ -13,7 +13,7 @@ import 'Widgets/MyDrawer.dart';
 class dolabim extends StatefulWidget {
   Users aktifKullanici;
   dolabim(this.aktifKullanici);
- // const dolabim({Key? key}) : super(key: key);
+  // const dolabim({Key? key}) : super(key: key);
 
   @override
   State<dolabim> createState() => _dolabimState();
@@ -23,18 +23,17 @@ class _dolabimState extends State<dolabim> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   late List<MyIngredients> myingredientsList = [];
   late List<Ingredients> ingredientsList = [];
-  late Set <String> turList = {"sebze"};
+  late Set<String> turList = {"sebze"};
   //Checkbox için bir liste tanımlandı
   late List<bool> _isChecked;
   late TextEditingController controller;
-  late String dropdownturListDeger =turList.first;
+  late String dropdownturListDeger = turList.first;
   late Ingredients dropdownDeger;
   late List<Ingredients> dropdownList;
   var baseUrl = BakpisirStrings().baseUrl;
 
   Future<List<MyIngredients>> MyIngredientsGet(String a) async {
-
-    var url = Uri.parse(baseUrl+"MyIngredientsGet.php");
+    var url = Uri.parse(baseUrl + "MyIngredientsGet.php");
     var veri = {"userID": a};
     var cevap = await http.post(url, body: veri);
     return parseMyIngredientsCevap(cevap.body);
@@ -52,7 +51,7 @@ class _dolabimState extends State<dolabim> {
 
   Future<void> MyIngredientsGoster() async {
     myingredientsList =
-    await MyIngredientsGet(widget.aktifKullanici.userId.toString());
+        await MyIngredientsGet(widget.aktifKullanici.userId.toString());
     //Checkbox için tanımlanan listeye malzemeler listesi uzunlugunda false atandı
     _isChecked = List<bool>.filled(myingredientsList.length, false);
     setState(() {});
@@ -60,7 +59,7 @@ class _dolabimState extends State<dolabim> {
 
   Future<void> insertMyIngredients(String userID, String ingID) async {
     var baseUrl = BakpisirStrings().baseUrl;
-    var url = Uri.parse(baseUrl+"insert_MyIngredients.php");
+    var url = Uri.parse(baseUrl + "insert_MyIngredients.php");
     var veri = {
       "userID": userID,
       "ingID": ingID,
@@ -82,7 +81,7 @@ class _dolabimState extends State<dolabim> {
   }
 
   Future<void> deleteMyIngredients(String myingID) async {
-    var url = Uri.parse(baseUrl+"delete_MyIngredients.php");
+    var url = Uri.parse(baseUrl + "delete_MyIngredients.php");
     var veri = {
       "myingID": myingID,
     };
@@ -105,7 +104,7 @@ class _dolabimState extends State<dolabim> {
   }
 
   Future<List<Ingredients>> IngredientsGet() async {
-    var url = Uri.parse(baseUrl+"IngredientsGet.php");
+    var url = Uri.parse(baseUrl + "IngredientsGet.php");
     var cevap = await http.get(url);
     return parseIngredientsCevap(cevap.body);
   }
@@ -119,102 +118,95 @@ class _dolabimState extends State<dolabim> {
       dropdownList = ingredientsList;
       dropdownDeger = dropdownList[0];
       turList.clear();
-      for (var i in ingredientsList){
+      for (var i in ingredientsList) {
         turList.add(i.ingTypeName);
       }
     }
     return ingredientsList;
   }
 
-  Future <String?> openDialog() =>
-      showDialog <String>(
-
-          context: context,
-          builder: (context) =>
-              AlertDialog(
-                content: StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height*0.2,
-                    width: MediaQuery.of(context).size.height*0.8,
-                    child: Column(
-                      children: [
-                        Text("Malzeme Türünü Seçiniz"),
-                        DropdownButton<String>(
-                          value: dropdownturListDeger,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          onChanged: (String? newValue) {
-                            Iterable<Ingredients> filtrele = ingredientsList.where((element) {
-                              print("----- ${element.ingTypeID}");
-                              return element.ingTypeID==newValue;
-                            });
-                            dropdownList = filtrele.toList();
-                            dropdownDeger=dropdownList[0];
-                            setState(() {
-                              dropdownturListDeger = newValue!;
-
-                            });
-                          },
-                          items: turList.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                              onTap: (){
-
-                              },
-                            );
-
-                          }).toList(),
+  Future<String?> openDialog() => showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+              content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  width: MediaQuery.of(context).size.height * 0.8,
+                  child: Column(
+                    children: [
+                      Text("Malzeme Türünü Seçiniz"),
+                      DropdownButton<String>(
+                        value: dropdownturListDeger,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
                         ),
-                        Text("Malzeme Seçiniz"),
-                        DropdownButton<Ingredients>(
-                          value: dropdownDeger,
-                          icon: const Icon(Icons.arrow_downward),
-                            elevation: 16,
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                            ),
+                        onChanged: (String? newValue) {
+                          Iterable<Ingredients> filtrele =
+                              ingredientsList.where((element) {
+                            print("----- ${element.ingTypeID}");
+                            return element.ingTypeID == newValue;
+                          });
+                          dropdownList = filtrele.toList();
+                          dropdownDeger = dropdownList[0];
+                          setState(() {
+                            dropdownturListDeger = newValue!;
+                          });
+                        },
+                        items: turList
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                            onTap: () {},
+                          );
+                        }).toList(),
+                      ),
+                      Text("Malzeme Seçiniz"),
+                      DropdownButton<Ingredients>(
+                        value: dropdownDeger,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
+                        ),
                         onChanged: (Ingredients? newValue) {
                           setState(() {
-                           dropdownDeger = newValue!;
-                            });
-                          },
-                          items: dropdownList.map<DropdownMenuItem<Ingredients>>((Ingredients value) {
-                            return DropdownMenuItem<Ingredients>(
-                              value: value,
-                              child: Text(value.ingName),
-                               onTap: (){
-                                setState((){
-                                });
-                                },
-                              );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-
-                title: const Text("Eklenecek Malzeme Girin"),
-
-
-                actions: [
-                TextButton(onPressed: (){
-                  insertMyIngredients(widget.aktifKullanici.userId.toString(),dropdownDeger.ingID.toString());
-                  Navigator.of(context).pop();
-                  },
+                            dropdownDeger = newValue!;
+                          });
+                        },
+                        items: dropdownList.map<DropdownMenuItem<Ingredients>>(
+                            (Ingredients value) {
+                          return DropdownMenuItem<Ingredients>(
+                            value: value,
+                            child: Text(value.ingName),
+                            onTap: () {
+                              setState(() {});
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+              title: const Text("Eklenecek Malzeme Girin"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      insertMyIngredients(
+                          widget.aktifKullanici.userId.toString(),
+                          dropdownDeger.ingID.toString());
+                      Navigator.of(context).pop();
+                    },
                     child: const Text("Ekle"))
-                  ]
-
-
-              ));
+              ]));
 
   @override
   void initState() {
@@ -239,12 +231,13 @@ class _dolabimState extends State<dolabim> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.red.shade300,
         title: Text("Bak Pişir - Dolabım"),
       ),
       drawer: MyDrawer(widget.aktifKullanici),
       key: scaffoldKey,
-
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(0),
         child: Column(
           children: [
             Center(
@@ -252,16 +245,72 @@ class _dolabimState extends State<dolabim> {
                 height: ekranYuksekligi * 0.8,
                 width: ekranGenisligi * 0.9,
                 child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 3 / 1),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, childAspectRatio: 1 / 1.5),
                     itemCount: myingredientsList.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        child: Row(
+                      return Container(
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 2.0,
+                                color: const Color.fromRGBO(219, 112, 147, 1)),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(25)),
+                        width: 100,
+                        height: 50,
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  color: Colors.red.shade800,
+                                  alignment: Alignment.topCenter,
+                                  iconSize: 25,
+                                  icon: Icon(
+                                    Icons.backspace,
+                                  ),
+                                  onPressed: () {
+                                    for (var i = 0;
+                                        i < myingredientsList.length;
+                                        i++) {
+                                      if (_isChecked[i]) {
+                                        print("silinecek öğe");
+                                        print(myingredientsList[i]
+                                            .myingID
+                                            .toString());
+                                        deleteMyIngredients(myingredientsList[i]
+                                            .myingID
+                                            .toString());
+                                        setState(() {});
+                                      }
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Image.network(
+                                baseUrl +
+                                    "sebze/${myingredientsList[index].ingImage}",
+                                width: 100,
+                                height: 45,
+                              ),
+                            ),
+                            Text(
+                              "-${myingredientsList[index].ingName}",
+                              style: TextStyle(
+                                  fontFamily: "Hellix",
+                                  fontSize: 16,
+                                  color: Colors.pink.shade700),
+                            ),
                             Checkbox(
+                              activeColor: Colors.pink.shade100,
+                              checkColor: Colors.pink.shade700,
                               value: _isChecked[index],
                               onChanged: (bool? value) {
                                 setState(() {
@@ -270,48 +319,30 @@ class _dolabimState extends State<dolabim> {
                                 });
                               },
                             ),
-                            Image.network(baseUrl+"sebze/${myingredientsList[index].ingImage}"),
-                            Text("-${myingredientsList[index].ingName}"),
-
                           ],
                         ),
                       );
-                    }
-
-                ),
-
+                    }),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                        child: Text("Malzeme Sil"),
-                        onPressed: () {
-                          for (var i = 0; i < myingredientsList.length; i++) {
-                            if (_isChecked[i]) {
-                              print("silinecek öğe");
-                              print(myingredientsList[i].myingID.toString());
-                              deleteMyIngredients(myingredientsList[i].myingID.toString());
-                              setState(() {
-                              });
-                            }
-                          }
-                        }),
-
-
-                    ElevatedButton(
-                        child: Text("Malzeme Ekle"),
-                        onPressed: () async {
-                          var a = await openDialog();
-                          //Todo gelen stringi hash map e ekle
-                          // malzemeler[a.toString()]=1;
-                          // print(malzemeler);
-                        }),
-                  ]
-              ),
+            Container(
+              margin: EdgeInsets.only(right: 17),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                IconButton(
+                    alignment: Alignment.center,
+                    icon: Icon(
+                      Icons.add_circle,
+                      size: 49,
+                      color: Colors.pink.shade900,
+                    ),
+                    onPressed: () async {
+                      var a = await openDialog();
+                      //Todo gelen stringi hash map e ekle
+                      // malzemeler[a.toString()]=1;
+                      // print(malzemeler);
+                    }),
+              ]),
             ),
           ],
         ),

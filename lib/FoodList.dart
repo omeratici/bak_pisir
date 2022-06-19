@@ -92,7 +92,9 @@ class _FoodListState extends State<FoodList> {
             width: 300,
             height: 150,
             decoration: BoxDecoration(
-                color: Colors.red.shade100,
+                border: Border.all(
+                    width: 2.0, color: const Color.fromRGBO(219, 112, 147, 1)),
+                color: Colors.pink.shade50,
                 borderRadius: BorderRadius.circular(25)),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -100,22 +102,15 @@ class _FoodListState extends State<FoodList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(25),
                         child: Image.network(
                           baseUrl + "sebze/kabak.jpg",
                           width: 80,
-                          alignment: Alignment.topRight,
+                          alignment: Alignment.topCenter,
                         ),
-                      ),
-                      Text(
-                        "Çorbalar",
-                        style: TextStyle(
-                            fontFamily: "Hellix",
-                            fontSize: 19,
-                            color: Colors.red.shade400),
                       ),
                     ],
                   ),
@@ -131,7 +126,10 @@ class _FoodListState extends State<FoodList> {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         foodsList[index].foodName,
-                        style: TextStyle(fontFamily: "Hellix", fontSize: 16),
+                        style: TextStyle(
+                            fontFamily: "Hellix",
+                            fontSize: 16,
+                            color: Colors.pink.shade700),
                       ),
                     ),
                   ),
@@ -147,18 +145,44 @@ class _FoodListState extends State<FoodList> {
                     style: TextStyle(
                         fontFamily: "Hellix",
                         fontSize: 13,
-                        color: Colors.red.shade400),
+                        color: Colors.pink.shade400),
                   ),
                   SizedBox(
                     height: 4,
                   ),
                   Row(
                     children: [
-                      Text("20 Dakika"),
-                      SizedBox(
-                        width: 20,
+                      Row(
+                        children: [
+                          Text("20 Dakika",
+                              style: TextStyle(
+                                  fontFamily: "Hellix",
+                                  fontSize: 13,
+                                  color: Colors.red.shade300)),
+                          Icon(
+                            Icons.timer,
+                            size: 13,
+                            color: Colors.red.shade300,
+                          ),
+                        ],
                       ),
-                      Text("4 Kişilik"),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Row(
+                        children: [
+                          Text("4 Kişilik",
+                              style: TextStyle(
+                                  fontFamily: "Hellix",
+                                  fontSize: 13,
+                                  color: Colors.red.shade300)),
+                          Icon(
+                            Icons.person,
+                            size: 13,
+                            color: Colors.red.shade300,
+                          ),
+                        ],
+                      ),
                     ],
                   )
                 ],
