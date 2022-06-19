@@ -274,6 +274,10 @@ class _dolabimState extends State<dolabim> {
                                     Icons.backspace,
                                   ),
                                   onPressed: () {
+                                    deleteMyIngredients(myingredientsList[index]
+                                        .myingID
+                                        .toString());
+                                    setState(() {});
                                     for (var i = 0;
                                         i < myingredientsList.length;
                                         i++) {
@@ -288,6 +292,7 @@ class _dolabimState extends State<dolabim> {
                                         setState(() {});
                                       }
                                     }
+
                                   },
                                 ),
                               ],
@@ -296,7 +301,7 @@ class _dolabimState extends State<dolabim> {
                               borderRadius: BorderRadius.circular(5),
                               child: Image.network(
                                 baseUrl +
-                                    "sebze/${myingredientsList[index].ingImage}",
+                                    "${myingredientsList[index].ingTypeName}/${myingredientsList[index].ingImage}",
                                 width: 100,
                                 height: 45,
                               ),
