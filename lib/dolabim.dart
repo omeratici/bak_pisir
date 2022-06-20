@@ -128,22 +128,50 @@ class _dolabimState extends State<dolabim> {
   Future<String?> openDialog() => showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-              content: StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  width: MediaQuery.of(context).size.height * 0.8,
-                  child: Column(
-                    children: [
-                      Text("Malzeme Türünü Seçiniz"),
-                      DropdownButton<String>(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            contentPadding: EdgeInsets.only(top: 5.0),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                width: 300,
+                height: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Malzeme Türünü Seçiniz",
+                      style: TextStyle(
+                        fontFamily: "Hellix",
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 55, vertical: 1),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.pink, width: 2),
+                      ),
+                      child: DropdownButton<String>(
+                        alignment: Alignment.center,
                         value: dropdownturListDeger,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
+                        icon: const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.pink,
+                        ),
+                        elevation: 6,
+                        style: TextStyle(color: Colors.pink.shade500),
                         underline: Container(
+                          width: 20,
                           height: 2,
-                          color: Colors.deepPurpleAccent,
+                          color: Colors.pink.shade500,
                         ),
                         onChanged: (String? newValue) {
                           Iterable<Ingredients> filtrele =
@@ -161,20 +189,47 @@ class _dolabimState extends State<dolabim> {
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(
+                              value,
+                              textAlign: TextAlign.center,
+                            ),
                             onTap: () {},
                           );
                         }).toList(),
                       ),
-                      Text("Malzeme Seçiniz"),
-                      DropdownButton<Ingredients>(
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Malzeme Seçiniz",
+                      style: TextStyle(
+                        fontFamily: "Hellix",
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.pink, width: 2),
+                      ),
+                      child: DropdownButton<Ingredients>(
                         value: dropdownDeger,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
+                        icon: const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.pink,
+                        ),
+                        elevation: 6,
+                        style: TextStyle(color: Colors.pink.shade500),
                         underline: Container(
+                          width: 20,
                           height: 2,
-                          color: Colors.deepPurpleAccent,
+                          color: Colors.pink.shade500,
                         ),
                         onChanged: (Ingredients? newValue) {
                           setState(() {
@@ -192,21 +247,41 @@ class _dolabimState extends State<dolabim> {
                           );
                         }).toList(),
                       ),
-                    ],
-                  ),
-                );
-              }),
-              title: const Text("Eklenecek Malzeme Girin"),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      insertMyIngredients(
-                          widget.aktifKullanici.userId.toString(),
-                          dropdownDeger.ingID.toString());
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("Ekle"))
-              ]));
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        insertMyIngredients(
+                            widget.aktifKullanici.userId.toString(),
+                            dropdownDeger.ingID.toString());
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                          width: 100,
+                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                          decoration: BoxDecoration(
+                            color: Colors.pink.shade300,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(32.0),
+                            ),
+                          ),
+                          child: Text(
+                            "Ekle",
+                            style: TextStyle(
+                              fontFamily: 'Hellix',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ));
 
   @override
   void initState() {
@@ -247,7 +322,7 @@ class _dolabimState extends State<dolabim> {
                 child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3, childAspectRatio: 1 / 1.5),
+                            crossAxisCount: 3, childAspectRatio: 1 / 1.6),
                     itemCount: myingredientsList.length,
                     itemBuilder: (context, index) {
                       return Container(
@@ -269,7 +344,7 @@ class _dolabimState extends State<dolabim> {
                                 IconButton(
                                   color: Colors.red.shade800,
                                   alignment: Alignment.topCenter,
-                                  iconSize: 25,
+                                  iconSize: 20,
                                   icon: Icon(
                                     Icons.backspace,
                                   ),
@@ -292,25 +367,25 @@ class _dolabimState extends State<dolabim> {
                                         setState(() {});
                                       }
                                     }
-
                                   },
                                 ),
                               ],
                             ),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(5),
-                              child: Image.network(
-                                baseUrl +
+                              child: FadeInImage.assetNetwork(
+                                placeholder: 'assets/load.gif',
+                                image: baseUrl +
                                     "${myingredientsList[index].ingTypeName}/${myingredientsList[index].ingImage}",
                                 width: 100,
                                 height: 45,
                               ),
                             ),
                             Text(
-                              "-${myingredientsList[index].ingName}",
+                              "${myingredientsList[index].ingName}",
                               style: TextStyle(
                                   fontFamily: "Hellix",
-                                  fontSize: 16,
+                                  fontSize: 13,
                                   color: Colors.pink.shade700),
                             ),
                             Checkbox(
