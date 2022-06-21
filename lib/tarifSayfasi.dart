@@ -252,14 +252,32 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                 height: 24,
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 1.2,
-                child: Text(
-                  widget.food.foodName,
-                  style: TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 36,
-                      fontFamily: "Hellix"),
+                width: MediaQuery.of(context).size.width / 1.1,
+                child: Row(
+                  children: [
+                    Text(
+                      widget.food.foodName,
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 36,
+                          fontFamily: "Hellix"),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        icon:
+                        Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        );
+                      },
+                      
+                      icon: Icon(Icons.favorite_border),
+                      
+                      iconSize: 35,
+                      color: Colors.red,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(

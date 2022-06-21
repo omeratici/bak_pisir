@@ -88,107 +88,118 @@ class _FoodListState extends State<FoodList> {
         padding: const EdgeInsets.all(8.0),
         itemCount: foodsList.length,
         itemBuilder: (context, index) {
-          return Container(
-            width: 300,
-            height: 150,
-            decoration: BoxDecoration(
-                border: Border.all(
-                    width: 2.0, color: const Color.fromRGBO(219, 112, 147, 1)),
-                color: Colors.pink.shade50,
-                borderRadius: BorderRadius.circular(25)),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          return InkWell(
+              child: Container(
+                width: 300,
+                height: 150,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 2.0,
+                        color: const Color.fromRGBO(219, 112, 147, 1)),
+                    color: Colors.pink.shade50,
+                    borderRadius: BorderRadius.circular(25)),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(25),
-                        child: Image.network(
-                          baseUrl + "sebze/kabak.jpg",
-                          width: 80,
-                          alignment: Alignment.topCenter,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Image.network(
+                              baseUrl + "sebze/kabak.jpg",
+                              width: 80,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => tarifSayfasi(
+                                      widget.aktifKullanici,
+                                      foodsList[index])));
+                        },
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            foodsList[index].foodName,
+                            style: TextStyle(
+                                fontFamily: "Hellix",
+                                fontSize: 16,
+                                color: Colors.pink.shade700),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => tarifSayfasi(
-                                  widget.aktifKullanici, foodsList[index])));
-                    },
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        foodsList[index].foodName,
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text("Rating"),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        "120 Kalori",
                         style: TextStyle(
                             fontFamily: "Hellix",
-                            fontSize: 16,
-                            color: Colors.pink.shade700),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text("Rating"),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "120 Kalori",
-                    style: TextStyle(
-                        fontFamily: "Hellix",
-                        fontSize: 13,
-                        color: Colors.pink.shade400),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    children: [
-                      Row(
-                        children: [
-                          Text("20 Dakika",
-                              style: TextStyle(
-                                  fontFamily: "Hellix",
-                                  fontSize: 13,
-                                  color: Colors.red.shade300)),
-                          Icon(
-                            Icons.timer,
-                            size: 13,
-                            color: Colors.red.shade300,
-                          ),
-                        ],
+                            fontSize: 13,
+                            color: Colors.pink.shade400),
                       ),
                       SizedBox(
-                        width: 5,
+                        height: 4,
                       ),
                       Row(
                         children: [
-                          Text("4 Kişilik",
-                              style: TextStyle(
-                                  fontFamily: "Hellix",
-                                  fontSize: 13,
-                                  color: Colors.red.shade300)),
-                          Icon(
-                            Icons.person,
-                            size: 13,
-                            color: Colors.red.shade300,
+                          Row(
+                            children: [
+                              Text("20 Dakika",
+                                  style: TextStyle(
+                                      fontFamily: "Hellix",
+                                      fontSize: 13,
+                                      color: Colors.red.shade300)),
+                              Icon(
+                                Icons.timer,
+                                size: 13,
+                                color: Colors.red.shade300,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              Text("4 Kişilik",
+                                  style: TextStyle(
+                                      fontFamily: "Hellix",
+                                      fontSize: 13,
+                                      color: Colors.red.shade300)),
+                              Icon(
+                                Icons.person,
+                                size: 13,
+                                color: Colors.red.shade300,
+                              ),
+                            ],
                           ),
                         ],
-                      ),
+                      )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
-            ),
-          );
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => tarifSayfasi(
+                          widget.aktifKullanici, foodsList[index])),
+                );
+              });
         },
       ),
     );
