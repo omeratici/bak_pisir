@@ -11,7 +11,6 @@ import 'IngredientsCevap.dart';
 import 'Users.dart';
 import 'dart:io';
 
-
 class tarifYaz extends StatefulWidget {
   Users aktifKullanici;
   tarifYaz({required this.aktifKullanici});
@@ -23,7 +22,7 @@ class tarifYaz extends StatefulWidget {
 
 class _tarifYazState extends State<tarifYaz> {
   var baseUrl = BakpisirStrings().baseUrl;
-  Foodtypes ddturdeger = Foodtypes(0, "Türler Yükleniyor", "typeImage") ;
+  Foodtypes ddturdeger = Foodtypes(0, "Türler Yükleniyor", "typeImage");
   List<Foodtypes> foodTypeList = [];
   var foodTypeSelectController = TextEditingController();
   var foodRecipeController = TextEditingController();
@@ -38,17 +37,15 @@ class _tarifYazState extends State<tarifYaz> {
   late List<Ingredients> dropdownList;
   late List<bool> _isChecked;
 
-  void ResimAl () async{
+  void ResimAl() async {
     final picker = ImagePicker();
     final secilen = await picker.pickImage(source: ImageSource.gallery);
 
-    setState((){
-    if(secilen != null){
-      secilendosya = PickedFile(secilen.path);
-
-    }
-  });
-
+    setState(() {
+      if (secilen != null) {
+        secilendosya = PickedFile(secilen.path);
+      }
+    });
   }
 
   Future<List<Ingredients>> IngredientsGet() async {
@@ -78,7 +75,6 @@ class _tarifYazState extends State<tarifYaz> {
     var jsonVeri = json.decode(cevap);
     if (jsonVeri["success"] as int == 1) {
       typesCevap = FoodtypesCevap.fromJson(jsonVeri);
-
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -95,8 +91,7 @@ class _tarifYazState extends State<tarifYaz> {
   }
 
   Future<void> FoodTypeGoster() async {
-    foodTypeList =
-    await typesGet();
+    foodTypeList = await typesGet();
     ddturdeger = await foodTypeList[0];
     setState(() {});
   }
@@ -104,26 +99,54 @@ class _tarifYazState extends State<tarifYaz> {
   Future<String?> openDialog() => showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-          content: StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                  width: MediaQuery.of(context).size.height * 0.8,
-                  child: Column(
-                    children: [
-                      Text("Malzeme Türünü Seçiniz"),
-                      DropdownButton<String>(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            contentPadding: EdgeInsets.only(top: 5.0),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                width: 300,
+                height: 300,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      "Malzeme Türünü Seçiniz",
+                      style: TextStyle(
+                        fontFamily: "Hellix",
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 55, vertical: 1),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.pink, width: 2),
+                      ),
+                      child: DropdownButton<String>(
+                        alignment: Alignment.center,
                         value: dropdownturListDeger,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
+                        icon: const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.pink,
+                        ),
+                        elevation: 6,
+                        style: TextStyle(color: Colors.pink.shade500),
                         underline: Container(
+                          width: 20,
                           height: 2,
-                          color: Colors.deepPurpleAccent,
+                          color: Colors.pink.shade500,
                         ),
                         onChanged: (String? newValue) {
                           Iterable<Ingredients> filtrele =
-                          ingredientsList.where((element) {
+                              ingredientsList.where((element) {
                             print("----- ${element.ingTypeName}");
                             return element.ingTypeName == newValue;
                           });
@@ -137,20 +160,47 @@ class _tarifYazState extends State<tarifYaz> {
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(
+                              value,
+                              textAlign: TextAlign.center,
+                            ),
                             onTap: () {},
                           );
                         }).toList(),
                       ),
-                      Text("Malzeme Seçiniz"),
-                      DropdownButton<Ingredients>(
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "Malzeme Seçiniz",
+                      style: TextStyle(
+                        fontFamily: "Hellix",
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.pink, width: 2),
+                      ),
+                      child: DropdownButton<Ingredients>(
                         value: dropdownDeger,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
+                        icon: const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.pink,
+                        ),
+                        elevation: 6,
+                        style: TextStyle(color: Colors.pink.shade500),
                         underline: Container(
+                          width: 20,
                           height: 2,
-                          color: Colors.deepPurpleAccent,
+                          color: Colors.pink.shade500,
                         ),
                         onChanged: (Ingredients? newValue) {
                           setState(() {
@@ -158,52 +208,69 @@ class _tarifYazState extends State<tarifYaz> {
                           });
                         },
                         items: dropdownList.map<DropdownMenuItem<Ingredients>>(
-                                (Ingredients value) {
-                              return DropdownMenuItem<Ingredients>(
-                                value: value,
-                                child: Text(value.ingName),
-                                onTap: () {
-                                  setState(() {});
-                                },
-                              );
-                            }).toList(),
+                            (Ingredients value) {
+                          return DropdownMenuItem<Ingredients>(
+                            value: value,
+                            child: Text(value.ingName),
+                            onTap: () {
+                              setState(() {});
+                            },
+                          );
+                        }).toList(),
                       ),
-                    ],
-                  ),
-                );
-              }),
-          title: const Text("Eklenecek Malzeme Girin"),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  foodIngredientsList.add(dropdownDeger);
-                  setState((){
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        foodIngredientsList.add(dropdownDeger);
+                        setState(() {});
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                          width: 100,
+                          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                          decoration: BoxDecoration(
+                            color: Colors.pink.shade300,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(32.0),
+                            ),
+                          ),
+                          child: Text(
+                            "Ekle",
+                            style: TextStyle(
+                              fontFamily: 'Hellix',
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ));
 
-                  });
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Ekle"))
-          ]));
-
- @override
- void initState() {
-   super.initState();
-   IngredientsGet();
-   FoodTypeGoster();
- }
+  @override
+  void initState() {
+    super.initState();
+    IngredientsGet();
+    FoodTypeGoster();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/kayit.png'), fit: BoxFit.cover)),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.red.shade300,
+          title: Text("Bak Pişir - Tarif Ekle"),
+        ),
         body: Stack(children: [
-
           Container(
-            padding: EdgeInsets.only(left: 35, top: 130),
+            padding: EdgeInsets.only(left: 35, top: 50),
             child: Text(
               "Tarif",
               style: TextStyle(color: Colors.white, fontSize: 33),
@@ -212,55 +279,100 @@ class _tarifYazState extends State<tarifYaz> {
           SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.5,
+                  top: MediaQuery.of(context).size.height * 0.05,
                   right: 35,
                   left: 35),
               child: Column(
                 children: [
-                  Text("Yemek Türünü Giriniz"),
-                  DropdownButton<Foodtypes>(
-                    value: ddturdeger,
-                    icon: const Icon(Icons.arrow_downward),
-                    elevation: 16,
-                    style: const TextStyle(color: Colors.deepPurple),
-                    underline: Container(
-                      height: 2,
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    onChanged: (Foodtypes? newValue) {
-                      secilenTur = newValue!.typeId;
-                      /*
-                      Iterable<Ingredients> filtrele =
-                      ingredientsList.where((element) {
-                        print("----- ${element.ingTypeName}");
-                        return element.ingTypeName == newValue;
-                      });
-                      dropdownList = filtrele.toList();
-                      dropdownDeger = dropdownList[0];
-                      setState(() {
-                        dropdownturListDeger = newValue!;
-                      });
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        '       Yemeğinizin adı :',
+                        style: TextStyle(fontFamily: 'Hellix', fontSize: 16),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 130,
+                        child: TextFormField(
+                          maxLines: 8,
+                          controller: foodTypeSelectController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            hintText: 'Yemek Adı',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "Yemek Türünü Giriniz:",
+                        style: TextStyle(fontFamily: 'Hellix', fontSize: 16),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.pink, width: 2),
+                        ),
+                        child: DropdownButton<Foodtypes>(
+                          value: ddturdeger,
+                          icon: const Icon(
+                            Icons.arrow_downward,
+                            color: (Colors.pink),
+                          ),
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.pink),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.pink,
+                          ),
+                          onChanged: (Foodtypes? newValue) {
+                            secilenTur = newValue!.typeId;
+                            /*
+                        Iterable<Ingredients> filtrele =
+                        ingredientsList.where((element) {
+                          print("----- ${element.ingTypeName}");
+                          return element.ingTypeName == newValue;
+                        });
+                        dropdownList = filtrele.toList();
+                        dropdownDeger = dropdownList[0];
+                        setState(() {
+                          dropdownturListDeger = newValue!;
+                        });
 
-                       */
-                    },
-                    items: foodTypeList
-                        .map<DropdownMenuItem<Foodtypes>>((Foodtypes value) {
-                      return DropdownMenuItem<Foodtypes>(
-                        value: value,
-                        child: Text(value.typeName),
-                        onTap: () {},
-                      );
-                    }).toList(),
+                         */
+                          },
+                          items: foodTypeList.map<DropdownMenuItem<Foodtypes>>(
+                              (Foodtypes value) {
+                            return DropdownMenuItem<Foodtypes>(
+                              value: value,
+                              child: Text(value.typeName),
+                              onTap: () {},
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 40),
-                  if(foodIngredientsList.length>0)
+                  if (foodIngredientsList.length > 0)
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.5,
-                      width:  MediaQuery.of(context).size.width * 0.9,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: GridView.builder(
                           gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, childAspectRatio: 1 / 1.5),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3, childAspectRatio: 1 / 1.5),
                           itemCount: foodIngredientsList.length,
                           itemBuilder: (context, index) {
                             return Container(
@@ -268,7 +380,8 @@ class _tarifYazState extends State<tarifYaz> {
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2.0,
-                                      color: const Color.fromRGBO(219, 112, 147, 1)),
+                                      color: const Color.fromRGBO(
+                                          219, 112, 147, 1)),
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(25)),
                               width: 100,
@@ -286,10 +399,7 @@ class _tarifYazState extends State<tarifYaz> {
                                         icon: Icon(
                                           Icons.backspace,
                                         ),
-                                        onPressed: () {
-
-
-                                        },
+                                        onPressed: () {},
                                       ),
                                     ],
                                   ),
@@ -309,71 +419,89 @@ class _tarifYazState extends State<tarifYaz> {
                                         fontSize: 16,
                                         color: Colors.pink.shade700),
                                   ),
-
                                 ],
                               ),
                             );
                           }),
                     ),
-                  ElevatedButton(
-                    onPressed: () {
-                      openDialog();
-                    },
-                    child: const Text('Malzeme Ekle'),
-                    style: ElevatedButton.styleFrom(
-                        primary: (Color.fromRGBO(229, 57, 53, 1)),
-                        fixedSize: const Size(200, 50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50))),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        '     Malzeme Seçiniz:',
+                        style: TextStyle(fontFamily: 'Hellix', fontSize: 16),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          openDialog();
+                        },
+                        child: ClipRRect(
+                          child: Image.asset(
+                            'assets/bag.png',
+                            width: 100,
+                            height: 55,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  TextFormField(
-                    controller: foodTypeSelectController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Yemek Adını Giriniz',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fillColor: Colors.grey.shade100,
-                        filled: true),
+                  SizedBox(
+                    height: 44,
                   ),
-                  TextFormField(
-                    controller: foodRecipeController,
-                    maxLines: null,
-
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                        hintText: 'Tarifi Yazınız',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        fillColor: Colors.grey.shade100,
-                        filled: true),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        "     Resminizi yükleyin:",
+                        style: TextStyle(fontFamily: 'Hellix', fontSize: 16),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          ResimAl();
+                        },
+                        child: ClipRRect(
+                          child: Image.asset(
+                            'assets/image.png',
+                            width: 100,
+                            height: 55,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-
+                  SizedBox(
+                    height: 24,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Tarif',
+                    style: TextStyle(fontFamily: 'Hellix', fontSize: 16),
+                  ),
+                  Divider(
+                    color: Colors.black,
+                    height: 7.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                    child: TextFormField(
+                      controller: foodRecipeController,
+                      maxLines: null,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: const InputDecoration(
+                        hintText: "Tarif Yazınız.",
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
                   if (secilendosya != null)
                     Image.file(
                       File(secilendosya!.path),
                       width: 300,
                       height: 200,
-
                     ),
-
                   SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      ResimAl();
-                    },
-                    child: const Text('Resim Al'),
-                    style: ElevatedButton.styleFrom(
-                        primary: (Color.fromRGBO(229, 57, 53, 1)),
-                        fixedSize: const Size(200, 50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50))),
-                  ),
-
-
-
-
-
                 ],
               ),
             ),

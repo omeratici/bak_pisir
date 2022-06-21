@@ -271,9 +271,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           color: Colors.red,
                         );
                       },
-                      
                       icon: Icon(Icons.favorite_border),
-                      
                       iconSize: 35,
                       color: Colors.red,
                     ),
