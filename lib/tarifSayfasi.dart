@@ -99,55 +99,97 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
     showDialog<String>(
         context: context,
         builder: (context) => AlertDialog(
-                content: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    width: MediaQuery.of(context).size.height * 0.8,
-                    child: Column(
-                      children: [
-                        Text("Yorumunuzu Yazınız"),
-                        SizedBox(
-                            height: 200,
-                            child: TextField(
-                              controller: comment,
-                              decoration: const InputDecoration(
-                                  hintText: "Yorum yazınız"),
-                            )),
-                        Text("Yemek tarifi için puan veriniz"),
-                        RatingBar.builder(
-                          initialRating: evaluationGrade,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding: EdgeInsets.symmetric(horizontal: 3.0),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+              contentPadding: EdgeInsets.only(top: 10.0),
+              content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  width: 300,
+                  height: 300,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Oylama   ",
+                            style: TextStyle(
+                                fontSize: 24.0,
+                                fontFamily: 'Hellix',
+                                color: Colors.pink),
                           ),
-                          onRatingUpdate: (rating) {
-                            evaluationGrade = rating;
-                          },
+                          RatingBar.builder(
+                            itemSize: 25,
+                            initialRating: evaluationGrade,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemPadding: EdgeInsets.symmetric(horizontal: 3.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              evaluationGrade = rating;
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Divider(
+                        color: Colors.black,
+                        height: 7.0,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                        child: TextField(
+                          maxLines: 8,
+                          controller: comment,
+                          decoration: const InputDecoration(
+                            hintText: "Yorum yazınız",
+                            border: InputBorder.none,
+                          ),
                         ),
-                      ],
-                    ),
-                  );
-                }),
-                title: const Text("Yorum Yapınız..."),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Future<int> response = insertComments(
-                            widget.food.foodID.toString(),
-                            comment.text,
-                            evaluationGrade.toString(),
-                            widget.aktifKullanici.userId.toString());
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Future<int> response = insertComments(
+                              widget.food.foodID.toString(),
+                              comment.text,
+                              evaluationGrade.toString(),
+                              widget.aktifKullanici.userId.toString());
 
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("Ekle"))
-                ]));
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: 15.0, bottom: 15.0, right: 25, left: 25),
+                          decoration: BoxDecoration(
+                            color: Colors.pink.shade300,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(26.0),
+                            ),
+                          ),
+                          child: Text(
+                            "Yorum Ekle",
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ));
   }
 
   Future<List<Ingredients>> GetFood_ingredients(String foodID) async {
@@ -210,14 +252,32 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                 height: 24,
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 1.2,
-                child: Text(
-                  widget.food.foodName,
-                  style: TextStyle(
-                      color: Colors.black87,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 36,
-                      fontFamily: "Hellix"),
+                width: MediaQuery.of(context).size.width / 1.1,
+                child: Row(
+                  children: [
+                    Text(
+                      widget.food.foodName,
+                      style: TextStyle(
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 36,
+                          fontFamily: "Hellix"),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        icon:
+                        Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        );
+                      },
+                      
+                      icon: Icon(Icons.favorite_border),
+                      
+                      iconSize: 35,
+                      color: Colors.red,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
