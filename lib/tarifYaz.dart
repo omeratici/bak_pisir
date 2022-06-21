@@ -315,7 +315,6 @@ class _tarifYazState extends State<tarifYaz> {
                             );
                           }),
                     ),
-
                   ElevatedButton(
                     onPressed: () {
                       openDialog();
