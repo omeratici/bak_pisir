@@ -87,6 +87,8 @@ class _GirisEkraniState extends State<GirisEkrani> {
     if (aktifKullanici.userId != 0) {
       print(aktifKullanici.userId);
       print(aktifKullanici.userName);
+      tfKullaniciAdi.clear();
+      tfKSifre.clear();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -188,7 +190,7 @@ class _GirisEkraniState extends State<GirisEkrani> {
                   SizedBox(
                     height: 40,
                   ),
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
@@ -221,10 +223,28 @@ class _GirisEkraniState extends State<GirisEkrani> {
                               color: Color.fromRGBO(175, 68, 72, 1),
                             ),
                           )),
+                      TextButton(
+                          onPressed: () {
+                            Users user = Users(0, "Misafir", "0", "0", "0");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => anaSAyfa(aktifKullnaici: user)));
+                          },
+                          child: Text(
+                            "Üye Olmadan Devam Et",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 18,
+                              color: Color.fromRGBO(175, 68, 72, 1),
+                            ),
+                          )),
+
                       SizedBox(
                         height: 30,
                       ),
                     ],
+
                   )
                 ],
               ),

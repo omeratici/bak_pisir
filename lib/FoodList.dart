@@ -24,7 +24,7 @@ class _FoodListState extends State<FoodList> {
   late List<Foods> foodsList = [];
 
   Future<List<Foods>> GetFoods(String foodType) async {
-    var url = Uri.parse(baseUrl + "getFoods.php");
+    var url = Uri.parse(baseUrl + "getFoodsv2.php");
     print("giden type id;");
     print(widget.typeId.toString());
     var veri = {"typeId": widget.typeId.toString()};
@@ -139,7 +139,7 @@ class _FoodListState extends State<FoodList> {
                       SizedBox(
                         height: 4,
                       ),
-                      Text("Rating"),
+                      Text(foodsList[index].rating.toString()),
                       SizedBox(
                         height: 4,
                       ),

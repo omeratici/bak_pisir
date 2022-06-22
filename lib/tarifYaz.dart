@@ -14,7 +14,7 @@ import 'dart:io';
 
 class tarifYaz extends StatefulWidget {
   Users aktifKullanici;
-  tarifYaz({required this.aktifKullanici});
+  tarifYaz(this.aktifKullanici);
   //const tarifYaz({Key? key}) : super(key: key);
 
   @override

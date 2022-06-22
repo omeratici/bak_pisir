@@ -574,6 +574,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           }
                         }
                         if (check) {
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text("Daha önce yorum yapmışsınız.")),

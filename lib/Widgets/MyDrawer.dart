@@ -1,5 +1,6 @@
 import 'package:bak_pisir/anaSayfa.dart';
 import 'package:bak_pisir/tarifSayfasi.dart';
+import 'package:bak_pisir/uyeOl.dart';
 import 'package:flutter/material.dart';
 
 import '../Users.dart';
@@ -54,20 +55,37 @@ class _MyDrawerState extends State<MyDrawer> {
           ListTile(
             title: Text("Dolabımda Neler Var?"),
             onTap: () {
+              if(widget.aktifKullanici.userId==0){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Dolabım bölümünü kullanmak için üye olunuz!")),
+                );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => uyeOl()));
+                  }else{
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => dolabim(widget.aktifKullanici)));
+              }
             },
           ),
           ListTile(
             title: Text("Tarif Yaz"),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => tarifYaz(aktifKullanici: widget.aktifKullanici)));
-              //    Navigator.push(context, MaterialPageRoute(builder: (context) => tarifSayfasi(widget.aktifKullanici)));
+              if(widget.aktifKullanici.userId==0){
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Tarif yazabilmek için için üye olunuz!")),
+                );
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => uyeOl()));
+              }else{
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => tarifYaz(widget.aktifKullanici)));
+              }
             },
           ),
           ListTile(
@@ -83,9 +101,9 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            title: Text("Alışveriş Listem"),
+            title: Text("Çıkış Yap"),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.of(context).popUntil(ModalRoute.withName('/'));
             },
           ),
         ],
