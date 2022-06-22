@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bak_pisir/BakpisirStrings.dart';
 import 'package:bak_pisir/Foodtypes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'FoodtypesCevap.dart';
@@ -24,18 +25,21 @@ class _tarifYazState extends State<tarifYaz> {
   var baseUrl = BakpisirStrings().baseUrl;
   Foodtypes ddturdeger = Foodtypes(0, "Türler Yükleniyor", "typeImage");
   List<Foodtypes> foodTypeList = [];
+  var foodNameController = TextEditingController();
   var foodTypeSelectController = TextEditingController();
   var foodRecipeController = TextEditingController();
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  late List<Ingredients> foodIngredientsList = [];
   PickedFile? secilendosya;
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   late var secilenTur;
   late Set<String> turList = {"sebze"};
   late String dropdownturListDeger = turList.first;
-  late List<Ingredients> foodIngredientsList = [];
   late List<Ingredients> ingredientsList = [];
   late Ingredients dropdownDeger;
   late List<Ingredients> dropdownList;
   late List<bool> _isChecked;
+
 
   void ResimAl() async {
     final picker = ImagePicker();
@@ -99,11 +103,11 @@ class _tarifYazState extends State<tarifYaz> {
   Future<String?> openDialog() => showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(32.0))),
-            contentPadding: EdgeInsets.only(top: 5.0),
-            content: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+        contentPadding: EdgeInsets.only(top: 5.0),
+        content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
               return Container(
                 width: 300,
                 height: 300,
@@ -125,7 +129,7 @@ class _tarifYazState extends State<tarifYaz> {
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 55, vertical: 1),
+                      EdgeInsets.symmetric(horizontal: 55, vertical: 1),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.pink, width: 2),
@@ -146,7 +150,7 @@ class _tarifYazState extends State<tarifYaz> {
                         ),
                         onChanged: (String? newValue) {
                           Iterable<Ingredients> filtrele =
-                              ingredientsList.where((element) {
+                          ingredientsList.where((element) {
                             print("----- ${element.ingTypeName}");
                             return element.ingTypeName == newValue;
                           });
@@ -184,7 +188,7 @@ class _tarifYazState extends State<tarifYaz> {
                     ),
                     Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                      EdgeInsets.symmetric(horizontal: 15, vertical: 1),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.pink, width: 2),
@@ -208,15 +212,15 @@ class _tarifYazState extends State<tarifYaz> {
                           });
                         },
                         items: dropdownList.map<DropdownMenuItem<Ingredients>>(
-                            (Ingredients value) {
-                          return DropdownMenuItem<Ingredients>(
-                            value: value,
-                            child: Text(value.ingName),
-                            onTap: () {
-                              setState(() {});
-                            },
-                          );
-                        }).toList(),
+                                (Ingredients value) {
+                              return DropdownMenuItem<Ingredients>(
+                                value: value,
+                                child: Text(value.ingName),
+                                onTap: () {
+                                  setState(() {});
+                                },
+                              );
+                            }).toList(),
                       ),
                     ),
                     SizedBox(
@@ -225,7 +229,6 @@ class _tarifYazState extends State<tarifYaz> {
                     InkWell(
                       onTap: () {
                         foodIngredientsList.add(dropdownDeger);
-                        setState(() {});
                         Navigator.of(context).pop();
                       },
                       child: Container(
@@ -251,7 +254,63 @@ class _tarifYazState extends State<tarifYaz> {
                 ),
               );
             }),
-          ));
+      ));
+void malzemeEkle()async{
+var a = await openDialog();
+setState((){});
+}
+
+dosyagonder() async {
+  var request = http.MultipartRequest("POST", Uri.parse(baseUrl));
+  request.fields['dosyaadi'] = 'resim1';
+  request.fields['tur'] = 'resim';
+
+ Map<String,String> headers = {"yetki":"omer","id":"1"};
+ request.headers.addAll(headers);
+ //'assets/load.gif'
+var image = http.MultipartFile.fromBytes('resim',(await rootBundle.load(secilendosya!.path)).buffer.asUint8List(),filename: "omer");
+request.files.add(image);
+
+var response = await request.send();
+var responseData = await response.stream.toBytes();
+var result = await String.fromCharCodes(responseData);
+ print(result);
+
+ }
+ // doyagonderdio (){
+ //   FormData formData = new FormData.from({
+ //     "name": "wendux",
+ //     "file1": new UploadFileInfo(new File("./upload.jpg"), "upload1.jpg")
+ //   });
+ //   response = await dio.post("/info", data: formData)
+ //
+ // }
+
+  Future<void> insertFood(String userID, String recipe,  String typeId, String foodName) async {
+    var url = Uri.parse(baseUrl + "insert_Food.php");
+    var veri = {
+      "authorId": userID,
+      "recipe": recipe,
+      "foodImage": "kabak.jpg",
+      "typeId": typeId,
+      "foodName": foodName,
+    };
+    var cevap = await http.post(url, body: veri);
+    var jsonVeri = json.decode(cevap.body);
+    if (jsonVeri["success"] as int == 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Kayıt Başarılı")),
+      );
+      setState(() {});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Kayıt Başarısız Tekrar Deneyin")),
+      );
+    }
+    print(cevap.body.toString());
+  }
+
+
 
   @override
   void initState() {
@@ -296,7 +355,7 @@ class _tarifYazState extends State<tarifYaz> {
                         width: 130,
                         child: TextFormField(
                           maxLines: 8,
-                          controller: foodTypeSelectController,
+                          controller: foodNameController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: 'Yemek Adı',
@@ -338,6 +397,9 @@ class _tarifYazState extends State<tarifYaz> {
                           ),
                           onChanged: (Foodtypes? newValue) {
                             secilenTur = newValue!.typeId;
+                            ddturdeger = newValue;
+                            setState((){});
+
                             /*
                         Iterable<Ingredients> filtrele =
                         ingredientsList.where((element) {
@@ -371,8 +433,8 @@ class _tarifYazState extends State<tarifYaz> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: GridView.builder(
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3, childAspectRatio: 1 / 1.5),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, childAspectRatio: 1 / 1.6),
                           itemCount: foodIngredientsList.length,
                           itemBuilder: (context, index) {
                             return Container(
@@ -380,8 +442,7 @@ class _tarifYazState extends State<tarifYaz> {
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2.0,
-                                      color: const Color.fromRGBO(
-                                          219, 112, 147, 1)),
+                                      color: const Color.fromRGBO(219, 112, 147, 1)),
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(25)),
                               width: 100,
@@ -395,35 +456,44 @@ class _tarifYazState extends State<tarifYaz> {
                                       IconButton(
                                         color: Colors.red.shade800,
                                         alignment: Alignment.topCenter,
-                                        iconSize: 25,
+                                        iconSize: 20,
                                         icon: Icon(
                                           Icons.backspace,
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          //todo silemei,şlemi yap
+                                          foodIngredientsList.removeAt(index);
+                                          setState(() {});
+
+                                        },
                                       ),
                                     ],
                                   ),
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(5),
-                                    child: Image.network(
-                                      baseUrl +
+                                    child: FadeInImage.assetNetwork(
+                                      placeholder: 'assets/load.gif',
+                                      image: baseUrl +
                                           "${foodIngredientsList[index].ingTypeName}/${foodIngredientsList[index].ingImage}",
                                       width: 100,
                                       height: 45,
                                     ),
                                   ),
                                   Text(
-                                    "-${foodIngredientsList[index].ingName}",
+                                    "${foodIngredientsList[index].ingName}",
                                     style: TextStyle(
                                         fontFamily: "Hellix",
-                                        fontSize: 16,
+                                        fontSize: 13,
                                         color: Colors.pink.shade700),
                                   ),
+
                                 ],
                               ),
                             );
                           }),
                     ),
+
+                  //Malzeme Seçimi
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -433,8 +503,9 @@ class _tarifYazState extends State<tarifYaz> {
                       ),
                       InkWell(
                         onTap: () {
-                          openDialog();
+                         malzemeEkle();
                         },
+
                         child: ClipRRect(
                           child: Image.asset(
                             'assets/bag.png',
@@ -448,6 +519,7 @@ class _tarifYazState extends State<tarifYaz> {
                   SizedBox(
                     height: 44,
                   ),
+                  //Resim Yükleme
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -502,6 +574,29 @@ class _tarifYazState extends State<tarifYaz> {
                       height: 200,
                     ),
                   SizedBox(height: 40),
+                  TextButton(onPressed: (){
+
+                    setState((){});
+                  // if(secilendosya != null){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text("Bir Resim Ekleyin")),
+                  //   );
+                  // }else if (foodRecipeController.text.length < 10){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text("Tarifinizi Yazınız")),
+                  //   );
+                  // }else if(foodNameController.text.isEmpty){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text("Yemeğinizin adını yazınız")),
+                  //   );
+                  // }else if (foodIngredientsList.isEmpty){
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(content: Text("Yemeğinizin mlzemelerini ekleyin")),
+                  //   );
+                  // }else{
+                  //   insertFood(widget.aktifKullanici.userName, foodRecipeController.text, ddturdeger.typeId.toString(), foodNameController.text);
+                  //   }
+                  }, child: Text("gönder"))
                 ],
               ),
             ),
