@@ -40,7 +40,6 @@ class _tarifYazState extends State<tarifYaz> {
   late List<Ingredients> dropdownList;
   late List<bool> _isChecked;
 
-
   void ResimAl() async {
     final picker = ImagePicker();
     final secilen = await picker.pickImage(source: ImageSource.gallery);
@@ -103,11 +102,11 @@ class _tarifYazState extends State<tarifYaz> {
   Future<String?> openDialog() => showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0))),
-        contentPadding: EdgeInsets.only(top: 5.0),
-        content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            contentPadding: EdgeInsets.only(top: 5.0),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
               return Container(
                 width: 300,
                 height: 300,
@@ -129,7 +128,7 @@ class _tarifYazState extends State<tarifYaz> {
                     ),
                     Container(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 55, vertical: 1),
+                          EdgeInsets.symmetric(horizontal: 55, vertical: 1),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.pink, width: 2),
@@ -150,7 +149,7 @@ class _tarifYazState extends State<tarifYaz> {
                         ),
                         onChanged: (String? newValue) {
                           Iterable<Ingredients> filtrele =
-                          ingredientsList.where((element) {
+                              ingredientsList.where((element) {
                             print("----- ${element.ingTypeName}");
                             return element.ingTypeName == newValue;
                           });
@@ -188,7 +187,7 @@ class _tarifYazState extends State<tarifYaz> {
                     ),
                     Container(
                       padding:
-                      EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 1),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.pink, width: 2),
@@ -212,15 +211,15 @@ class _tarifYazState extends State<tarifYaz> {
                           });
                         },
                         items: dropdownList.map<DropdownMenuItem<Ingredients>>(
-                                (Ingredients value) {
-                              return DropdownMenuItem<Ingredients>(
-                                value: value,
-                                child: Text(value.ingName),
-                                onTap: () {
-                                  setState(() {});
-                                },
-                              );
-                            }).toList(),
+                            (Ingredients value) {
+                          return DropdownMenuItem<Ingredients>(
+                            value: value,
+                            child: Text(value.ingName),
+                            onTap: () {
+                              setState(() {});
+                            },
+                          );
+                        }).toList(),
                       ),
                     ),
                     SizedBox(
@@ -254,39 +253,41 @@ class _tarifYazState extends State<tarifYaz> {
                 ),
               );
             }),
-      ));
-void malzemeEkle()async{
-var a = await openDialog();
-setState((){});
-}
+          ));
+  void malzemeEkle() async {
+    var a = await openDialog();
+    setState(() {});
+  }
 
-dosyagonder() async {
-  var request = http.MultipartRequest("POST", Uri.parse(baseUrl));
-  request.fields['dosyaadi'] = 'resim1';
-  request.fields['tur'] = 'resim';
+  dosyagonder() async {
+    var request = http.MultipartRequest("POST", Uri.parse(baseUrl));
+    request.fields['dosyaadi'] = 'resim1';
+    request.fields['tur'] = 'resim';
 
- Map<String,String> headers = {"yetki":"omer","id":"1"};
- request.headers.addAll(headers);
- //'assets/load.gif'
-var image = http.MultipartFile.fromBytes('resim',(await rootBundle.load(secilendosya!.path)).buffer.asUint8List(),filename: "omer");
-request.files.add(image);
+    Map<String, String> headers = {"yetki": "omer", "id": "1"};
+    request.headers.addAll(headers);
+    //'assets/load.gif'
+    var image = http.MultipartFile.fromBytes('resim',
+        (await rootBundle.load(secilendosya!.path)).buffer.asUint8List(),
+        filename: "omer");
+    request.files.add(image);
 
-var response = await request.send();
-var responseData = await response.stream.toBytes();
-var result = await String.fromCharCodes(responseData);
- print(result);
+    var response = await request.send();
+    var responseData = await response.stream.toBytes();
+    var result = await String.fromCharCodes(responseData);
+    print(result);
+  }
+  // doyagonderdio (){
+  //   FormData formData = new FormData.from({
+  //     "name": "wendux",
+  //     "file1": new UploadFileInfo(new File("./upload.jpg"), "upload1.jpg")
+  //   });
+  //   response = await dio.post("/info", data: formData)
+  //
+  // }
 
- }
- // doyagonderdio (){
- //   FormData formData = new FormData.from({
- //     "name": "wendux",
- //     "file1": new UploadFileInfo(new File("./upload.jpg"), "upload1.jpg")
- //   });
- //   response = await dio.post("/info", data: formData)
- //
- // }
-
-  Future<void> insertFood(String userID, String recipe,  String typeId, String foodName) async {
+  Future<void> insertFood(
+      String userID, String recipe, String typeId, String foodName) async {
     var url = Uri.parse(baseUrl + "insert_Food.php");
     var veri = {
       "authorId": userID,
@@ -309,8 +310,6 @@ var result = await String.fromCharCodes(responseData);
     }
     print(cevap.body.toString());
   }
-
-
 
   @override
   void initState() {
@@ -351,7 +350,7 @@ var result = await String.fromCharCodes(responseData);
                         style: TextStyle(fontFamily: 'Hellix', fontSize: 16),
                       ),
                       Container(
-                        height: 50,
+                        height: 57,
                         width: 130,
                         child: TextFormField(
                           maxLines: 8,
@@ -398,7 +397,7 @@ var result = await String.fromCharCodes(responseData);
                           onChanged: (Foodtypes? newValue) {
                             secilenTur = newValue!.typeId;
                             ddturdeger = newValue;
-                            setState((){});
+                            setState(() {});
 
                             /*
                         Iterable<Ingredients> filtrele =
@@ -433,8 +432,8 @@ var result = await String.fromCharCodes(responseData);
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: GridView.builder(
                           gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3, childAspectRatio: 1 / 1.6),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3, childAspectRatio: 1 / 1.6),
                           itemCount: foodIngredientsList.length,
                           itemBuilder: (context, index) {
                             return Container(
@@ -442,7 +441,8 @@ var result = await String.fromCharCodes(responseData);
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       width: 2.0,
-                                      color: const Color.fromRGBO(219, 112, 147, 1)),
+                                      color: const Color.fromRGBO(
+                                          219, 112, 147, 1)),
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(25)),
                               width: 100,
@@ -464,7 +464,6 @@ var result = await String.fromCharCodes(responseData);
                                           //todo silemei,şlemi yap
                                           foodIngredientsList.removeAt(index);
                                           setState(() {});
-
                                         },
                                       ),
                                     ],
@@ -486,7 +485,6 @@ var result = await String.fromCharCodes(responseData);
                                         fontSize: 13,
                                         color: Colors.pink.shade700),
                                   ),
-
                                 ],
                               ),
                             );
@@ -503,9 +501,8 @@ var result = await String.fromCharCodes(responseData);
                       ),
                       InkWell(
                         onTap: () {
-                         malzemeEkle();
+                          malzemeEkle();
                         },
-
                         child: ClipRRect(
                           child: Image.asset(
                             'assets/bag.png',
@@ -541,6 +538,13 @@ var result = await String.fromCharCodes(responseData);
                       ),
                     ],
                   ),
+                  SizedBox(height: 18),
+                  if (secilendosya != null)
+                    Image.file(
+                      File(secilendosya!.path),
+                      width: 300,
+                      height: 200,
+                    ),
                   SizedBox(
                     height: 24,
                   ),
@@ -567,36 +571,54 @@ var result = await String.fromCharCodes(responseData);
                       ),
                     ),
                   ),
-                  if (secilendosya != null)
-                    Image.file(
-                      File(secilendosya!.path),
-                      width: 300,
-                      height: 200,
-                    ),
-                  SizedBox(height: 40),
-                  TextButton(onPressed: (){
 
-                    setState((){});
-                  // if(secilendosya != null){
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(content: Text("Bir Resim Ekleyin")),
-                  //   );
-                  // }else if (foodRecipeController.text.length < 10){
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(content: Text("Tarifinizi Yazınız")),
-                  //   );
-                  // }else if(foodNameController.text.isEmpty){
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(content: Text("Yemeğinizin adını yazınız")),
-                  //   );
-                  // }else if (foodIngredientsList.isEmpty){
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //     SnackBar(content: Text("Yemeğinizin mlzemelerini ekleyin")),
-                  //   );
-                  // }else{
-                  //   insertFood(widget.aktifKullanici.userName, foodRecipeController.text, ddturdeger.typeId.toString(), foodNameController.text);
-                  //   }
-                  }, child: Text("gönder"))
+                  SizedBox(height: 40),
+
+                  InkWell(
+                    onTap: () {
+                      setState(() {});
+                      // if(secilendosya != null){
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text("Bir Resim Ekleyin")),
+                      //   );
+                      // }else if (foodRecipeController.text.length < 10){
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text("Tarifinizi Yazınız")),
+                      //   );
+                      // }else if(foodNameController.text.isEmpty){
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text("Yemeğinizin adını yazınız")),
+                      //   );
+                      // }else if (foodIngredientsList.isEmpty){
+                      //   ScaffoldMessenger.of(context).showSnackBar(
+                      //     SnackBar(content: Text("Yemeğinizin mlzemelerini ekleyin")),
+                      //   );
+                      // }else{
+                      //   insertFood(widget.aktifKullanici.userName, foodRecipeController.text, ddturdeger.typeId.toString(), foodNameController.text);
+                      //   }
+                    },
+                    child: Container(
+                        width: 100,
+                        padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                        decoration: BoxDecoration(
+                          color: Colors.pink.shade300,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(32.0),
+                          ),
+                        ),
+                        child: Text(
+                          "Tarifi Ekle",
+                          style: TextStyle(
+                            fontFamily: 'Hellix',
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        )),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
                 ],
               ),
             ),
