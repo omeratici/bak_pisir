@@ -88,18 +88,8 @@ class _MyDrawerState extends State<MyDrawer> {
               }
             },
           ),
-          ListTile(
-            title: Text("Favori Tariflerim"),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: Text("Dolabımdakilerle hangi yemekleri yapabilirim"),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
+
+
           ListTile(
             title: Text("Çıkış Yap"),
             onTap: () {
