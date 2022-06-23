@@ -202,14 +202,19 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
   List<Ingredients> parseFood_ingredientsCevap(String cevap) {
     print("gelen cevap parseFood_ingredientsCevap 1");
     print(cevap.isEmpty);
-    var jsonVeri = json.decode(cevap);
+    var jsonVeri2 =utf8.decode(cevap.codeUnits).toString();
+    var jsonVeri = json.decode(jsonVeri2);
     print("gelen cevap parseFood_ingredientsCevap");
     print(cevap.isEmpty);
 
     if (jsonVeri["success"] as int == 1) {
       var ingredientsCevap = IngredientsCevap.fromJson(jsonVeri);
       food_ingredientsList = ingredientsCevap.IngredientsList;
-    }
+      for(var i in food_ingredientsList){
+        print("************");
+        print(i.ingName);
+      }
+    }else {print(jsonVeri["succsess"].toString());}
     return food_ingredientsList;
   }
 
@@ -370,8 +375,8 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           ]),
                     ),
                     Image.network(
-                      baseUrl + "sebze/mantar.jpg",
-                      height: 250.0,
+                      baseUrl + widget.food.foodImage,
+                      height: 150.0,
                       fit: BoxFit.contain,
                     ),
                   ],

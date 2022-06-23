@@ -47,6 +47,7 @@ class _tarifYazState extends State<tarifYaz> {
     setState(() {
       if (secilen != null) {
         secilendosya = PickedFile(secilen.path);
+
       }
     });
   }
@@ -289,6 +290,56 @@ class _tarifYazState extends State<tarifYaz> {
   Future<void> insertFood(
       String userID, String recipe, String typeId, String foodName) async {
     var url = Uri.parse(baseUrl + "insert_Food.php");
+    var ingList =[];
+    for (var i in foodIngredientsList){
+      ingList.add ({
+        "foodingID": "",
+        "ingID": i.ingID.toString(),
+        "foodImage": "kabak.jpg",
+        "unitID": "1",
+        "quantity": "1",
+        "foodID":"",
+      });
+    }
+    var veri = {
+      "authorId": userID,
+      "recipe": recipe,
+      "foodImage": "yemekfoto/mercimekcorbasi.jpg",
+      "typeId": typeId,
+      "foodName": foodName,
+      "foodIngredientsList":ingList.toString(),
+
+    };
+    print("**********");
+    print(veri.toString());
+
+
+    var cevap = await http.post(url, body: veri);
+    var jsonVeri = json.decode(cevap.body);
+    if (jsonVeri["success"] as int == 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Kayıt Başarılı")),
+      );
+      setState(() {});
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Kayıt Başarısız Tekrar Deneyin")),
+      );
+    }
+    print(cevap.body.toString());
+  }
+  Future<void> insertFoodIngredients(
+      String userID, String recipe, String typeId, String foodName) async {
+    var url = Uri.parse(baseUrl + "insert_Food.php");
+    for (var i in foodIngredientsList){
+      var veri = {
+        "foodingID": "",
+        "ingID": recipe,
+        "foodImage": "kabak.jpg",
+        "typeId": typeId,
+        "foodName": foodName,
+      };
+    }
     var veri = {
       "authorId": userID,
       "recipe": recipe,
@@ -310,7 +361,6 @@ class _tarifYazState extends State<tarifYaz> {
     }
     print(cevap.body.toString());
   }
-
   @override
   void initState() {
     super.initState();
@@ -576,26 +626,26 @@ class _tarifYazState extends State<tarifYaz> {
 
                   InkWell(
                     onTap: () {
-                      setState(() {});
-                      // if(secilendosya != null){
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(content: Text("Bir Resim Ekleyin")),
-                      //   );
-                      // }else if (foodRecipeController.text.length < 10){
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(content: Text("Tarifinizi Yazınız")),
-                      //   );
-                      // }else if(foodNameController.text.isEmpty){
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(content: Text("Yemeğinizin adını yazınız")),
-                      //   );
-                      // }else if (foodIngredientsList.isEmpty){
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     SnackBar(content: Text("Yemeğinizin mlzemelerini ekleyin")),
-                      //   );
-                      // }else{
-                      //   insertFood(widget.aktifKullanici.userName, foodRecipeController.text, ddturdeger.typeId.toString(), foodNameController.text);
-                      //   }
+
+                      if(secilendosya == null){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Bir Resim Ekleyin")),
+                        );
+                      }else if (foodRecipeController.text.length < 10){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Tarifinizi Yazınız")),
+                        );
+                      }else if(foodNameController.text.isEmpty){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Yemeğinizin adını yazınız")),
+                        );
+                      }else if (foodIngredientsList.isEmpty){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Yemeğinizin mlzemelerini ekleyin")),
+                        );
+                      }else{
+                        insertFood(widget.aktifKullanici.userName, foodRecipeController.text, ddturdeger.typeId.toString(), foodNameController.text);
+                        }
                     },
                     child: Container(
                         width: 100,
