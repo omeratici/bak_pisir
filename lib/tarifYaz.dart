@@ -11,6 +11,8 @@ import 'Ingredients.dart';
 import 'IngredientsCevap.dart';
 import 'Users.dart';
 import 'dart:io';
+import 'dart:math';
+import 'package:random_string/random_string.dart';
 
 class tarifYaz extends StatefulWidget {
   Users aktifKullanici;
@@ -278,6 +280,34 @@ class _tarifYazState extends State<tarifYaz> {
     var result = await String.fromCharCodes(responseData);
     print(result);
   }
+
+
+  Future<void> uploadImage(foodImage) async {
+    var uploadurl = Uri.parse(baseUrl+'uploadImage.php');
+    try{
+      List<int> imageBytes = File(secilendosya!.path).readAsBytesSync();
+      String baseimage = base64Encode(imageBytes);
+      var response = await http.post(
+          uploadurl,
+          body: {
+            'image': baseimage,
+            'fileName': foodImage,
+          }
+      );
+      if(response.statusCode == 200){
+        var jsondata = json.decode(response.body);
+        if(jsondata["error"]){
+          print(jsondata["msg"]);
+        }else{
+          print("Fotograf Upload successful");
+        }
+      }else{
+        print(" Fotograf Error during connection to server");
+      }
+    }catch(e){
+      print("Fotograf Error during converting to Base64");
+    }
+  }
   // doyagonderdio (){
   //   FormData formData = new FormData.from({
   //     "name": "wendux",
@@ -289,13 +319,19 @@ class _tarifYazState extends State<tarifYaz> {
 
   Future<void> insertFood(
       String userID, String recipe, String typeId, String foodName) async {
+    var rng = Random();
+    var a = randomAlphaNumeric(10);
+    var foodImage = rng.nextInt(999999999).toString()+".jpg";
+    uploadImage(a);
     var url = Uri.parse(baseUrl + "insert_Food.php");
     var ingList =[];
+
+
     for (var i in foodIngredientsList){
       ingList.add ({
         "foodingID": "",
         "ingID": i.ingID.toString(),
-        "foodImage": "kabak.jpg",
+        "foodImage": foodImage,
         "unitID": "1",
         "quantity": "1",
         "foodID":"",
@@ -304,7 +340,7 @@ class _tarifYazState extends State<tarifYaz> {
     var veri = {
       "authorId": userID,
       "recipe": recipe,
-      "foodImage": "yemekfoto/mercimekcorbasi.jpg",
+      "foodImage": "yemekfoto/"+a,
       "typeId": typeId,
       "foodName": foodName,
       "foodIngredientsList":ingList.toString(),

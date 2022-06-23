@@ -9,7 +9,6 @@ import 'Foods.dart';
 import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
 import 'assets/db_icons.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class FoodList extends StatefulWidget {
   int typeId;
@@ -89,130 +88,119 @@ class _FoodListState extends State<FoodList> {
         padding: const EdgeInsets.all(8.0),
         itemCount: foodsList.length,
         itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: InkWell(
-                child: Container(
-                  width: 270,
-                  height: 170,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2.0,
-                          color: const Color.fromRGBO(219, 112, 147, 1)),
-                      color: Color.fromARGB(255, 252, 225, 234),
-                      borderRadius: BorderRadius.circular(25)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Image.network(
-                                baseUrl + "sebze/kabak.jpg",
-                                width: 80,
-                                alignment: Alignment.topCenter,
+          return InkWell(
+              child: Container(
+                width: 300,
+                height: 150,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 2.0,
+                        color: const Color.fromRGBO(219, 112, 147, 1)),
+                    color: Colors.pink.shade50,
+                    borderRadius: BorderRadius.circular(25)),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Image.network(
+                              baseUrl + foodsList[index].foodImage,
+                              width: 80,
+                              height: 80,
+                              alignment: Alignment.topCenter,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => tarifSayfasi(
+                                      widget.aktifKullanici,
+                                      foodsList[index])));
+                        },
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            foodsList[index].foodName,
+                            style: TextStyle(
+                                fontFamily: "Hellix",
+                                fontSize: 16,
+                                color: Colors.pink.shade700),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(foodsList[index].rating.toString()),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        "120 Kalori",
+                        style: TextStyle(
+                            fontFamily: "Hellix",
+                            fontSize: 13,
+                            color: Colors.pink.shade400),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Row(
+                            children: [
+                              Text("20 Dakika",
+                                  style: TextStyle(
+                                      fontFamily: "Hellix",
+                                      fontSize: 13,
+                                      color: Colors.red.shade300)),
+                              Icon(
+                                Icons.timer,
+                                size: 13,
+                                color: Colors.red.shade300,
                               ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => tarifSayfasi(
-                                        widget.aktifKullanici,
-                                        foodsList[index])));
-                          },
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              foodsList[index].foodName,
-                              style: TextStyle(
-                                  fontFamily: "Hellix",
-                                  fontSize: 16,
-                                  color: Colors.pink.shade700),
-                            ),
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        RatingBarIndicator(
-                          rating: double.parse(foodsList[index].rating),
-                          itemBuilder: (context, index) => const Icon(
-                            Icons.star,
-                            color: Colors.amber,
+                          SizedBox(
+                            width: 5,
                           ),
-                          itemCount: 5,
-                          itemSize: 15.0,
-                          direction: Axis.horizontal,
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
-                          "120 Kalori",
-                          style: TextStyle(
-                              fontFamily: "Hellix",
-                              fontSize: 13,
-                              color: Colors.pink.shade400),
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Text("20 Dakika",
-                                    style: TextStyle(
-                                        fontFamily: "Hellix",
-                                        fontSize: 13,
-                                        color: Colors.red.shade300)),
-                                Icon(
-                                  Icons.timer,
-                                  size: 13,
-                                  color: Colors.red.shade300,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Row(
-                              children: [
-                                Text("4 Kişilik",
-                                    style: TextStyle(
-                                        fontFamily: "Hellix",
-                                        fontSize: 13,
-                                        color: Colors.red.shade300)),
-                                Icon(
-                                  Icons.person,
-                                  size: 13,
-                                  color: Colors.red.shade300,
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          Row(
+                            children: [
+                              Text("4 Kişilik",
+                                  style: TextStyle(
+                                      fontFamily: "Hellix",
+                                      fontSize: 13,
+                                      color: Colors.red.shade300)),
+                              Icon(
+                                Icons.person,
+                                size: 13,
+                                color: Colors.red.shade300,
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => tarifSayfasi(
-                            widget.aktifKullanici, foodsList[index])),
-                  );
-                }),
-          );
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => tarifSayfasi(
+                          widget.aktifKullanici, foodsList[index])),
+                );
+              });
         },
       ),
     );
