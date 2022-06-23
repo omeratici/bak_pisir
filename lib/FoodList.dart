@@ -9,6 +9,7 @@ import 'Foods.dart';
 import 'Users.dart';
 import 'Widgets/MyDrawer.dart';
 import 'assets/db_icons.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class FoodList extends StatefulWidget {
   int typeId;
@@ -98,10 +99,10 @@ class _FoodListState extends State<FoodList> {
                       border: Border.all(
                           width: 2.0,
                           color: const Color.fromRGBO(219, 112, 147, 1)),
-                      color: Colors.pink.shade50,
+                      color: Color.fromARGB(255, 252, 225, 234),
                       borderRadius: BorderRadius.circular(25)),
                   child: Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -141,7 +142,16 @@ class _FoodListState extends State<FoodList> {
                         SizedBox(
                           height: 4,
                         ),
-                        Text(foodsList[index].rating.toString()),
+                        RatingBarIndicator(
+                          rating: double.parse(foodsList[index].rating),
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 15.0,
+                          direction: Axis.horizontal,
+                        ),
                         SizedBox(
                           height: 4,
                         ),

@@ -202,7 +202,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
   List<Ingredients> parseFood_ingredientsCevap(String cevap) {
     print("gelen cevap parseFood_ingredientsCevap 1");
     print(cevap.isEmpty);
-    var jsonVeri2 =utf8.decode(cevap.codeUnits).toString();
+    var jsonVeri2 = utf8.decode(cevap.codeUnits).toString();
     var jsonVeri = json.decode(jsonVeri2);
     print("gelen cevap parseFood_ingredientsCevap");
     print(cevap.isEmpty);
@@ -210,11 +210,13 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
     if (jsonVeri["success"] as int == 1) {
       var ingredientsCevap = IngredientsCevap.fromJson(jsonVeri);
       food_ingredientsList = ingredientsCevap.IngredientsList;
-      for(var i in food_ingredientsList){
+      for (var i in food_ingredientsList) {
         print("************");
         print(i.ingName);
       }
-    }else {print(jsonVeri["succsess"].toString());}
+    } else {
+      print(jsonVeri["succsess"].toString());
+    }
     return food_ingredientsList;
   }
 
@@ -267,18 +269,6 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           fontWeight: FontWeight.bold,
                           fontSize: 36,
                           fontFamily: "Hellix"),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        icon:
-                        Icon(
-                          Icons.favorite,
-                          color: Colors.red,
-                        );
-                      },
-                      icon: Icon(Icons.favorite_border),
-                      iconSize: 35,
-                      color: Colors.red,
                     ),
                   ],
                 ),
@@ -407,8 +397,9 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                               Text(
                                 food_ingredientsList[index].ingName,
                                 style: TextStyle(
-                                  fontSize: 19.0,
+                                  fontSize: 16.0,
                                   fontFamily: "Hellix",
+                                  color: Colors.grey.shade600,
                                 ),
                               ),
                             ],
@@ -579,7 +570,6 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           }
                         }
                         if (check) {
-
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                                 content: Text("Daha önce yorum yapmışsınız.")),
