@@ -270,6 +270,7 @@ class _tarifSayfasiState extends State<tarifSayfasi> {
                           fontSize: 36,
                           fontFamily: "Hellix"),
                     ),
+                    
                   ],
                 ),
               ),
